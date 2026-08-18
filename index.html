@@ -1,0 +1,493 @@
+<title>Mercado Radar</title>
+<style>
+:root{
+  --yellow:#FFE600; --yellow-ink:#2A2A20;
+  --blue:#3483FA; --blue-soft:#E6F0FF;
+  --ink:#1F2229; --ink-2:#5A6472; --ink-3:#8C93A0;
+  --ground:#EDEEF1; --surface:#FFFFFF; --line:#DFE2E7;
+  --good:#00A650; --good-soft:#E3F5EB;
+  --warn:#F5A623; --warn-soft:#FDF2DF;
+  --bad:#E64A3B; --bad-soft:#FCE9E7;
+  --mute:#9AA1AD; --mute-soft:#EFF0F2;
+  --shadow:0 1px 2px rgba(31,34,41,.08), 0 1px 8px rgba(31,34,41,.05);
+  --r:6px;
+  --ui:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --num:ui-monospace,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --yellow:#E8D200; --yellow-ink:#1A1B16;
+    --blue:#5B9BFF; --blue-soft:#1B2739;
+    --ink:#E9EBEF; --ink-2:#A7AEBB; --ink-3:#79818F;
+    --ground:#15171C; --surface:#1D2026; --line:#2C313A;
+    --good:#2ECC71; --good-soft:#122A1E;
+    --warn:#F0AD4E; --warn-soft:#2E2515;
+    --bad:#F0685A; --bad-soft:#2E1A18;
+    --mute:#79818F; --mute-soft:#23262D;
+    --shadow:0 1px 2px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --yellow:#E8D200; --yellow-ink:#1A1B16;
+  --blue:#5B9BFF; --blue-soft:#1B2739;
+  --ink:#E9EBEF; --ink-2:#A7AEBB; --ink-3:#79818F;
+  --ground:#15171C; --surface:#1D2026; --line:#2C313A;
+  --good:#2ECC71; --good-soft:#122A1E;
+  --warn:#F0AD4E; --warn-soft:#2E2515;
+  --bad:#F0685A; --bad-soft:#2E1A18;
+  --mute:#79818F; --mute-soft:#23262D;
+  --shadow:0 1px 2px rgba(0,0,0,.4);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--ui);font-size:14px;line-height:1.45}
+h1,h2,h3{margin:0;text-wrap:balance;letter-spacing:-.015em}
+
+/* ── шапка ─────────────────────────────────────────── */
+.top{background:var(--yellow);padding:10px 0 0}
+.top-in{max-width:1180px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.brand{display:flex;align-items:baseline;gap:9px;color:var(--yellow-ink)}
+.brand b{font-size:20px;letter-spacing:-.03em}
+.brand span{font-size:11.5px;opacity:.62;letter-spacing:.04em;text-transform:uppercase}
+.brand .beta{opacity:1;background:var(--yellow-ink);color:var(--yellow);font-weight:700;
+             padding:2px 7px;border-radius:4px;letter-spacing:.06em;font-size:10px;
+             position:relative;top:-2px}
+.sites{display:flex;gap:4px;margin-left:auto;flex-wrap:wrap}
+.site{border:0;background:rgba(0,0,0,.07);color:var(--yellow-ink);font:600 11.5px/1 var(--ui);
+      padding:6px 10px;border-radius:20px;cursor:pointer;font-family:var(--ui)}
+.site.on{background:var(--yellow-ink);color:var(--yellow)}
+.tabs{max-width:1180px;margin:0 auto;padding:12px 20px 0;display:flex;gap:2px}
+.tab{border:0;background:transparent;font:600 13.5px/1 var(--ui);color:var(--yellow-ink);opacity:.62;
+     padding:10px 14px;cursor:pointer;border-bottom:3px solid transparent;font-family:var(--ui)}
+.tab:hover{opacity:.9}
+.tab.on{opacity:1;border-bottom-color:var(--yellow-ink)}
+.tab:focus-visible,.site:focus-visible,.row:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+
+/* ── каркас ────────────────────────────────────────── */
+.wrap{max-width:1180px;margin:0 auto;padding:20px}
+.screen{display:none}
+.screen.on{display:block}
+.crumb{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--ink-3);margin-bottom:12px}
+.crumb a{color:var(--blue);text-decoration:none;cursor:pointer}
+.head{display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap;margin-bottom:4px}
+.head h2{font-size:23px}
+.sub{color:var(--ink-2);font-size:13px;margin:2px 0 18px}
+
+/* ── карточки ──────────────────────────────────────── */
+.grid{display:grid;gap:12px}
+.g4{grid-template-columns:repeat(4,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g2{grid-template-columns:3fr 2fr}
+@media(max-width:940px){.g4{grid-template-columns:repeat(2,1fr)}.g3,.g2{grid-template-columns:1fr}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+.card-p{padding:16px}
+.kpi .lab{font-size:11.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em;font-weight:600}
+.kpi .val{font:700 27px/1.15 var(--ui);font-variant-numeric:tabular-nums;margin:7px 0 3px;letter-spacing:-.03em}
+.kpi .note{font-size:12px;color:var(--ink-2)}
+.card h3{font-size:14px;padding:14px 16px;border-bottom:1px solid var(--line);display:flex;
+         align-items:center;gap:8px;justify-content:space-between}
+
+/* ── таблица ───────────────────────────────────────── */
+.scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-3);
+   font-weight:600;padding:9px 12px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:middle}
+tr:last-child td{border-bottom:0}
+.num{font-family:var(--num);font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap;font-size:12.5px}
+.row{cursor:pointer}
+.row:hover td{background:var(--blue-soft)}
+.name{font-weight:600}
+.name small{display:block;font-weight:400;color:var(--ink-3);font-family:var(--num);font-size:11px;margin-top:1px}
+
+/* ── метки ─────────────────────────────────────────── */
+.pill{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:700;
+      padding:3px 9px;border-radius:20px;white-space:nowrap}
+.pA{background:var(--good-soft);color:var(--good)}
+.pB{background:var(--warn-soft);color:#B67608}
+.pC{background:var(--mute-soft);color:var(--ink-3)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .pB{color:var(--warn)}}
+:root[data-theme="dark"] .pB{color:var(--warn)}
+.up{color:var(--good);font-weight:600}
+.down{color:var(--bad);font-weight:600}
+.flat{color:var(--ink-3)}
+.chip{display:inline-block;background:var(--mute-soft);color:var(--ink-2);font-size:12px;
+      padding:4px 10px;border-radius:20px;margin:0 5px 6px 0;border:1px solid var(--line)}
+.chip b{color:var(--ink);font-weight:600}
+.chip.new{background:var(--good-soft);color:var(--good);border-color:transparent}
+.chip.gone{background:var(--bad-soft);color:var(--bad);border-color:transparent;text-decoration:line-through}
+
+/* ── шкала оценки ──────────────────────────────────── */
+.score{display:flex;align-items:center;gap:8px}
+.bar{width:56px;height:5px;background:var(--mute-soft);border-radius:3px;overflow:hidden;flex:none}
+.bar i{display:block;height:100%;border-radius:3px}
+.sv{font-family:var(--num);font-size:12.5px;font-weight:700;width:26px;text-align:right}
+
+/* ── прочее ────────────────────────────────────────── */
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--ink-2);margin-top:10px}
+.legend b{color:var(--ink)}
+.demo{background:var(--blue-soft);color:var(--blue);font-size:11px;font-weight:700;padding:3px 8px;
+      border-radius:4px;letter-spacing:.02em}
+.real{background:var(--good-soft);color:var(--good);font-size:11px;font-weight:700;padding:3px 8px;border-radius:4px}
+.foot{max-width:1180px;margin:0 auto;padding:6px 20px 40px;color:var(--ink-3);font-size:12.5px}
+.foot b{color:var(--ink-2)}
+.seller{display:flex;align-items:center;gap:8px}
+.dot{width:8px;height:8px;border-radius:50%;flex:none}
+.win{background:var(--good)}.lose{background:var(--mute)}
+.price{font-family:var(--num);font-weight:700;font-variant-numeric:tabular-nums}
+.big{font:700 34px/1 var(--ui);font-variant-numeric:tabular-nums;letter-spacing:-.03em}
+.q{color:var(--ink-2);font-size:13px;max-width:62ch}
+.verdict{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;border-radius:var(--r);
+         background:var(--good-soft);border:1px solid transparent}
+.verdict.warn{background:var(--warn-soft)}
+.verdict .ic{font:700 15px/1 var(--num);color:var(--good);flex:none;margin-top:1px}
+.verdict.warn .ic{color:#B67608}
+.verdict p{margin:0;font-size:13px;color:var(--ink)}
+.verdict strong{display:block;margin-bottom:2px}
+</style>
+
+<header class="top">
+  <div class="top-in">
+    <div class="brand"><b>Mercado&nbsp;Radar</b><span class="beta">beta</span><span>Analítica de mercado</span></div>
+    <div class="sites">
+      <button class="site on">Argentina</button>
+      <button class="site">Brasil</button>
+      <button class="site">México</button>
+      <button class="site">Chile</button>
+      <button class="site">Colombia</button>
+      <button class="site">Uruguay</button>
+    </div>
+  </div>
+  <nav class="tabs">
+    <button class="tab on" data-go="map">Карта рынка</button>
+    <button class="tab" data-go="niche">Ниша</button>
+    <button class="tab" data-go="item">Товар</button>
+    <button class="tab" data-go="radar">Радар недели</button>
+  </nav>
+</header>
+
+<main class="wrap">
+
+<!-- ═══ 1. КАРТА РЫНКА ═══ -->
+<section class="screen on" id="map">
+  <div class="head"><h2>Карта рынка — Аргентина</h2><span class="real">данные реальные</span></div>
+  <p class="sub">32 корневые категории. Снимок 16 августа 2026, 04:15. Нажми на строку — откроется ниша.</p>
+
+  <div class="grid g4" style="margin-bottom:16px">
+    <div class="card card-p kpi"><div class="lab">Категорий</div><div class="val">32</div>
+      <div class="note">2 303 с подкатегориями</div></div>
+    <div class="card card-p kpi"><div class="lab">Товаров на площадке</div><div class="val">168,7 <span style="font-size:16px">млн</span></div>
+      <div class="note">сумма по всем нишам</div></div>
+    <div class="card card-p kpi"><div class="lab">Запросов в трендах</div><div class="val">1 450</div>
+      <div class="note">50 на категорию, обновление раз в неделю</div></div>
+    <div class="card card-p kpi"><div class="lab">Приоритет A</div><div class="val" style="color:var(--good)">7</div>
+      <div class="note">ниши для глубокого сбора</div></div>
+  </div>
+
+  <div class="card">
+    <h3>Все категории по привлекательности <span style="font-weight:400;color:var(--ink-3);font-size:12px">оценка 0–100</span></h3>
+    <div class="scroll"><table>
+      <thead><tr>
+        <th>Категория</th><th class="num">Товаров</th><th class="num">Подкат.</th>
+        <th class="num">Запросов</th><th class="num">Рост за 7д</th><th>Оценка</th><th>Приоритет</th>
+      </tr></thead>
+      <tbody id="cats"></tbody>
+    </table></div>
+  </div>
+
+  <div class="legend">
+    <span><b>A</b> — высокая активность, собираем глубоко</span>
+    <span><b>B</b> — средняя, собираем выборочно</span>
+    <span><b>C</b> — мёртвая, только периодический обзор</span>
+  </div>
+</section>
+
+<!-- ═══ 2. НИША ═══ -->
+<section class="screen" id="niche">
+  <div class="crumb"><a data-go="map">Карта рынка</a> › Deportes y Fitness</div>
+  <div class="head"><h2>Deportes y Fitness</h2><span class="pill pA">приоритет A</span></div>
+  <p class="sub">MLA1276 · 40 подкатегорий · оценка 87 из 100</p>
+
+  <div class="grid g4" style="margin-bottom:16px">
+    <div class="card card-p kpi"><div class="lab">Товаров в нише</div><div class="val">6,90 <span style="font-size:16px">млн</span></div>
+      <div class="note"><span class="up">+38 400</span> за неделю</div></div>
+    <div class="card card-p kpi"><div class="lab">Продавцов</div><div class="val">14 208</div>
+      <div class="note"><span class="up">+212</span> за неделю</div></div>
+    <div class="card card-p kpi"><div class="lab">Средняя цена</div><div class="val">$42 890</div>
+      <div class="note"><span class="down">−3,1 %</span> за месяц</div></div>
+    <div class="card card-p kpi"><div class="lab">Спрос против предложения</div><div class="val" style="color:var(--good)">1,8</div>
+      <div class="note">выше 1 — спрос обгоняет</div></div>
+  </div>
+
+  <div class="grid g2" style="margin-bottom:16px">
+    <div class="card">
+      <h3>Что ищут прямо сейчас <span class="real">реальные запросы</span></h3>
+      <div class="card-p" style="padding-top:14px">
+        <span class="chip new"><b>stanley</b> · новый</span>
+        <span class="chip"><b>rodilleras</b> · 2 нед.</span>
+        <span class="chip"><b>river</b> · 4 нед.</span>
+        <span class="chip new"><b>zapatillas trekking mujer</b> · новый</span>
+        <span class="chip"><b>zapatillas voley</b> · 3 нед.</span>
+        <span class="chip"><b>botella agua</b> · 6 нед.</span>
+        <span class="chip"><b>zapatillas montagne mujer</b> · 2 нед.</span>
+        <span class="chip"><b>picana defensa personal</b> · 1 нед.</span>
+        <span class="chip"><b>botella stanley</b> · 3 нед.</span>
+        <span class="chip gone">pesas rusas · ушёл</span>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Насыщенность за 30 дней</h3>
+      <div class="card-p">
+        <svg viewBox="0 0 320 96" style="width:100%;height:96px" role="img" aria-label="График роста числа товаров">
+          <defs><linearGradient id="gr" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#3483FA" stop-opacity=".26"/>
+            <stop offset="1" stop-color="#3483FA" stop-opacity="0"/></linearGradient></defs>
+          <line x1="0" y1="24" x2="320" y2="24" stroke="currentColor" stroke-opacity=".1"/>
+          <line x1="0" y1="56" x2="320" y2="56" stroke="currentColor" stroke-opacity=".1"/>
+          <path d="M0,78 L32,74 L64,76 L96,68 L128,64 L160,58 L192,52 L224,46 L256,36 L288,30 L320,22 L320,96 L0,96 Z" fill="url(#gr)"/>
+          <path d="M0,78 L32,74 L64,76 L96,68 L128,64 L160,58 L192,52 L224,46 L256,36 L288,30 L320,22"
+                fill="none" stroke="#3483FA" stroke-width="2.2" stroke-linejoin="round"/>
+          <circle cx="320" cy="22" r="4" fill="#3483FA"/>
+        </svg>
+        <p class="q" style="margin:8px 0 0">Продавцы заходят в нишу — за месяц объявлений стало на 4,7 % больше.
+          Конкуренция растёт, но спрос растёт быстрее.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Товары с наибольшим потенциалом <span class="demo">пример данных</span></h3>
+    <div class="scroll"><table>
+      <thead><tr><th>Товар</th><th class="num">Просмотры 7д</th><th class="num">Динамика</th>
+        <th class="num">Продавцов</th><th class="num">Цена</th><th class="num">Оценка продаж</th><th>Потенциал</th></tr></thead>
+      <tbody>
+        <tr class="row" data-go="item"><td class="name">Botella Stanley 1,18 L<small>MLA53151118</small></td>
+          <td class="num">27 480</td><td class="num up">+34 %</td><td class="num">42</td>
+          <td class="num price">$80 565</td><td class="num">~310 / мес</td>
+          <td><div class="score"><div class="bar"><i style="width:92%;background:var(--good)"></i></div><span class="sv">92</span></div></td></tr>
+        <tr class="row"><td class="name">Rodilleras deportivas par<small>MLA41208877</small></td>
+          <td class="num">9 145</td><td class="num up">+18 %</td><td class="num">17</td>
+          <td class="num price">$14 200</td><td class="num">~140 / мес</td>
+          <td><div class="score"><div class="bar"><i style="width:78%;background:var(--good)"></i></div><span class="sv">78</span></div></td></tr>
+        <tr class="row"><td class="name">Zapatillas trekking mujer<small>MLA38665510</small></td>
+          <td class="num">6 902</td><td class="num up">+52 %</td><td class="num">88</td>
+          <td class="num price">$62 400</td><td class="num">~95 / мес</td>
+          <td><div class="score"><div class="bar"><i style="width:64%;background:var(--warn)"></i></div><span class="sv">64</span></div></td></tr>
+        <tr class="row"><td class="name">Colchoneta yoga 10 mm<small>MLA30991204</small></td>
+          <td class="num">4 310</td><td class="num flat">+2 %</td><td class="num">134</td>
+          <td class="num price">$9 850</td><td class="num">~60 / мес</td>
+          <td><div class="score"><div class="bar"><i style="width:31%;background:var(--mute)"></i></div><span class="sv">31</span></div></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<!-- ═══ 3. ТОВАР ═══ -->
+<section class="screen" id="item">
+  <div class="crumb"><a data-go="map">Карта рынка</a> › <a data-go="niche">Deportes y Fitness</a> › Botella Stanley</div>
+  <div class="head"><h2>Botella Stanley 1,18 L</h2><span class="demo">пример данных</span></div>
+  <p class="sub">MLA53151118 · каталожная позиция · 42 продавца конкурируют за первое место</p>
+
+  <div class="grid g4" style="margin-bottom:16px">
+    <div class="card card-p kpi"><div class="lab">Просмотры за 7 дней</div><div class="val">27 480</div>
+      <div class="note"><span class="up">+34 %</span> к прошлой неделе</div></div>
+    <div class="card card-p kpi"><div class="lab">Отзывов прибавилось</div><div class="val">+38</div>
+      <div class="note">за 7 дней, всего 13 974</div></div>
+    <div class="card card-p kpi"><div class="lab">Оценка продаж</div><div class="val">~310</div>
+      <div class="note">штук в месяц по всей позиции</div></div>
+    <div class="card card-p kpi"><div class="lab">Оборот ниши</div><div class="val">$25 млн</div>
+      <div class="note">в месяц, оценка по всем продавцам</div></div>
+  </div>
+
+  <div class="grid g2" style="margin-bottom:16px">
+    <div class="card">
+      <h3>Просмотры по дням <span style="font-weight:400;color:var(--ink-3);font-size:12px">90 дней истории</span></h3>
+      <div class="card-p">
+        <svg viewBox="0 0 640 150" style="width:100%;height:150px" role="img" aria-label="График просмотров по дням">
+          <defs><linearGradient id="gv" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#00A650" stop-opacity=".24"/>
+            <stop offset="1" stop-color="#00A650" stop-opacity="0"/></linearGradient></defs>
+          <line x1="0" y1="38" x2="640" y2="38" stroke="currentColor" stroke-opacity=".1"/>
+          <line x1="0" y1="76" x2="640" y2="76" stroke="currentColor" stroke-opacity=".1"/>
+          <line x1="0" y1="114" x2="640" y2="114" stroke="currentColor" stroke-opacity=".1"/>
+          <path d="M0,112 L40,118 L80,104 L120,110 L160,96 L200,100 L240,88 L280,72 L320,84 L360,66 L400,58 L440,70 L480,48 L520,40 L560,52 L600,30 L640,24 L640,150 L0,150 Z" fill="url(#gv)"/>
+          <path d="M0,112 L40,118 L80,104 L120,110 L160,96 L200,100 L240,88 L280,72 L320,84 L360,66 L400,58 L440,70 L480,48 L520,40 L560,52 L600,30 L640,24"
+                fill="none" stroke="#00A650" stroke-width="2.4" stroke-linejoin="round"/>
+          <circle cx="640" cy="24" r="4.5" fill="#00A650"/>
+        </svg>
+        <p class="q" style="margin:10px 0 0">Интерес растёт третью неделю подряд. Пик приходится на выходные —
+          типично для спортивных товаров.</p>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Цена по рынку</h3>
+      <div class="card-p">
+        <div class="big" style="color:var(--good)">$80 565</div>
+        <p class="q" style="margin:4px 0 14px">победитель карточки, доставка со склада площадки</p>
+        <table style="font-size:12.5px">
+          <tr><td style="padding-left:0">Самая низкая</td><td class="num price">$74 900</td></tr>
+          <tr><td style="padding-left:0">Средняя по 42 продавцам</td><td class="num price">$92 340</td></tr>
+          <tr><td style="padding-left:0">Самая высокая</td><td class="num price">$129 999</td></tr>
+          <tr><td style="padding-left:0;border-bottom:0">Разброс</td><td class="num" style="border-bottom:0">1,7×</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:16px">
+    <h3>Кто продаёт эту позицию <span style="font-weight:400;color:var(--ink-3);font-size:12px">42 продавца, показаны первые 5</span></h3>
+    <div class="scroll"><table>
+      <thead><tr><th>Продавец</th><th class="num">Цена</th><th>Доставка</th><th>Репутация</th>
+        <th class="num">Сделок</th><th>Позиция</th></tr></thead>
+      <tbody>
+        <tr><td class="seller"><span class="dot win"></span><span class="name">Deportes Norte<small>113746522</small></span></td>
+          <td class="num price">$80 565</td><td>склад площадки</td><td><span class="pill pA">5 · зелёная</span></td>
+          <td class="num">12 480</td><td><b style="color:var(--good)">выигрывает</b></td></tr>
+        <tr><td class="seller"><span class="dot lose"></span><span class="name">Stanley Oficial<small>209884113</small></span></td>
+          <td class="num price">$84 900</td><td>склад площадки</td><td><span class="pill pA">5 · зелёная</span></td>
+          <td class="num">88 205</td><td class="flat">2 место</td></tr>
+        <tr><td class="seller"><span class="dot lose"></span><span class="name">Todo Camping<small>174552901</small></span></td>
+          <td class="num price">$88 100</td><td>своя доставка</td><td><span class="pill pB">4 · жёлтая</span></td>
+          <td class="num">3 940</td><td class="flat">7 место</td></tr>
+        <tr><td class="seller"><span class="dot lose"></span><span class="name">MegaOutdoor<small>301778420</small></span></td>
+          <td class="num price">$91 500</td><td>склад площадки</td><td><span class="pill pA">5 · зелёная</span></td>
+          <td class="num">21 067</td><td class="flat">11 место</td></tr>
+        <tr><td class="seller"><span class="dot lose"></span><span class="name">Importados BA<small>455120933</small></span></td>
+          <td class="num price">$129 999</td><td>своя доставка</td><td><span class="pill pC">3 · жёлтая</span></td>
+          <td class="num">612</td><td class="flat">38 место</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div class="verdict">
+    <span class="ic">→</span>
+    <p><strong>Что это значит</strong>
+      Чтобы забрать первое место, нужна цена ниже $80 565 и доставка со склада площадки.
+      При такой цене и текущем спросе позиция даёт ориентировочно 60–90 продаж в месяц на одного продавца.
+      Риск: за месяц в нишу зашли ещё 6 продавцов, цена сползает вниз.</p>
+  </div>
+</section>
+
+<!-- ═══ 4. РАДАР ═══ -->
+<section class="screen" id="radar">
+  <div class="head"><h2>Радар недели</h2><span class="demo">пример данных</span></div>
+  <p class="sub">Что изменилось с 9 по 16 августа. Ради этого и копится история — движение видно раньше, чем оно станет очевидным.</p>
+
+  <div class="grid g3" style="margin-bottom:16px">
+    <div class="card card-p kpi"><div class="lab">Новых запросов</div><div class="val" style="color:var(--good)">184</div>
+      <div class="note">впервые появились в трендах</div></div>
+    <div class="card card-p kpi"><div class="lab">Запросов ушло</div><div class="val" style="color:var(--bad)">147</div>
+      <div class="note">исчезли из трендов</div></div>
+    <div class="card card-p kpi"><div class="lab">Ниш разогрелось</div><div class="val" style="color:var(--warn)">5</div>
+      <div class="note">оценка выросла больше чем на 10</div></div>
+  </div>
+
+  <div class="grid g2" style="margin-bottom:16px">
+    <div class="card">
+      <h3>Ниши, которые пошли вверх</h3>
+      <div class="scroll"><table>
+        <thead><tr><th>Категория</th><th class="num">Было</th><th class="num">Стало</th><th class="num">Что сдвинулось</th></tr></thead>
+        <tbody>
+          <tr><td class="name">Deportes y Fitness</td><td class="num">74</td><td class="num" style="color:var(--good);font-weight:700">87</td>
+            <td class="num up">+13</td></tr>
+          <tr><td class="name">Herramientas</td><td class="num">69</td><td class="num" style="color:var(--good);font-weight:700">81</td>
+            <td class="num up">+12</td></tr>
+          <tr><td class="name">Animales y Mascotas</td><td class="num">58</td><td class="num" style="color:var(--good);font-weight:700">69</td>
+            <td class="num up">+11</td></tr>
+          <tr><td class="name">Belleza y Cuidado Personal</td><td class="num">61</td><td class="num">67</td><td class="num up">+6</td></tr>
+          <tr><td class="name">Consolas y Videojuegos</td><td class="num">44</td><td class="num">38</td><td class="num down">−6</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="card">
+      <h3>Запросы, которых не было неделю назад</h3>
+      <div class="card-p" style="padding-top:14px">
+        <span class="chip new"><b>stanley</b> · Deportes</span>
+        <span class="chip new"><b>zapatillas trekking mujer</b> · Deportes</span>
+        <span class="chip new"><b>milwaukee</b> · Herramientas</span>
+        <span class="chip new"><b>fresadora</b> · Herramientas</span>
+        <span class="chip new"><b>fuente agua gatos</b> · Mascotas</span>
+        <span class="chip new"><b>z fold 8</b> · Celulares</span>
+        <span class="chip new"><b>aro de luz</b> · Belleza</span>
+        <p class="q" style="margin:12px 0 0">Запрос, впервые попавший в тренды, — самый ранний сигнал.
+          До того как он станет заметен по продажам, проходит две-три недели.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="verdict warn">
+    <span class="ic">!</span>
+    <p><strong>Требует внимания</strong>
+      В Deportes y Fitness за неделю зашли 212 новых продавцов, а средняя цена упала на 3,1 %.
+      Ниша разогревается, но начинается ценовая война — заходить стоит сейчас или не заходить вовсе.</p>
+  </div>
+</section>
+
+</main>
+
+<p class="foot">
+  <b>Что здесь настоящее:</b> категории, число товаров и все запросы в трендах — живые данные Mercado Libre Argentina,
+  снятые 16 августа 2026. <b>Что нарисовано:</b> динамика, оценки продаж, цены конкурентов и оценки ниш —
+  для них нужна накопленная история, она появится через две-три недели после запуска сбора.
+</p>
+
+<script>
+const cats=[
+ ["Hogar, Muebles y Jardín","MLA1574",27453820,13,50,"+0,4 %",91,"A"],
+ ["Ropa y Accesorios","MLA1430",22877854,10,50,"+0,6 %",89,"A"],
+ ["Deportes y Fitness","MLA1276",6897310,40,50,"+0,9 %",87,"A"],
+ ["Accesorios para Vehículos","MLA5725",18661810,25,50,"+0,3 %",84,"A"],
+ ["Herramientas","MLA407134",7378326,9,50,"+1,1 %",81,"A"],
+ ["Juegos y Juguetes","MLA1132",6238954,22,50,"+0,5 %",76,"A"],
+ ["Belleza y Cuidado Personal","MLA1246",4448838,13,50,"+0,7 %",74,"A"],
+ ["Celulares y Teléfonos","MLA1051",4415216,10,50,"+0,2 %",71,"B"],
+ ["Arte, Librería y Mercería","MLA1368",4415025,17,50,"+0,4 %",70,"B"],
+ ["Computación","MLA1648",3834086,17,50,"+0,3 %",68,"B"],
+ ["Souvenirs, Cotillón y Fiestas","MLA9304",3710125,11,50,"+0,6 %",66,"B"],
+ ["Construcción","MLA1500",3411797,17,50,"+0,5 %",64,"B"],
+ ["Joyas y Relojes","MLA3937",3021417,14,50,"+0,4 %",62,"B"],
+ ["Electrónica, Audio y Video","MLA1000",2918285,19,50,"+0,2 %",61,"B"],
+ ["Alimentos y Bebidas","MLA1403",2901955,14,50,"+0,8 %",60,"B"],
+ ["Electrodomésticos y Aires Ac.","MLA5726",2669793,14,50,"+0,3 %",58,"B"],
+ ["Industrias y Oficinas","MLA1499",2335279,26,50,"+0,4 %",56,"B"],
+ ["Animales y Mascotas","MLA1071",2318921,28,50,"+1,0 %",69,"B"],
+ ["Cámaras y Accesorios","MLA1039",2077257,10,50,"+0,1 %",49,"B"],
+ ["Música, Películas y Series","MLA1168",1861696,7,50,"−0,2 %",41,"C"],
+ ["Bebés","MLA1384",1796115,17,50,"+0,4 %",55,"B"],
+ ["Otras categorías","MLA1953",1765990,11,50,"+0,3 %",38,"C"],
+ ["Salud y Equipamiento Médico","MLA409431",1426424,9,50,"+0,5 %",52,"B"],
+ ["Instrumentos Musicales","MLA1182",1228752,11,50,"+0,2 %",44,"C"],
+ ["Agro","MLA1512",683043,15,50,"+0,3 %",40,"C"],
+ ["Antigüedades y Colecciones","MLA1367",654158,17,50,"+0,1 %",33,"C"],
+ ["Inmuebles","MLA1459",619722,4,0,"—",12,"C"],
+ ["Libros, Revistas y Comics","MLA3025",21372879,7,50,"+0,2 %",57,"B"],
+ ["Consolas y Videojuegos","MLA1144",349236,7,50,"−0,4 %",38,"C"],
+ ["Autos, Motos y Otros","MLA1743",160471,7,50,"+0,1 %",29,"C"],
+ ["Servicios","MLA1540",12050,20,0,"—",8,"C"],
+ ["Entradas para Eventos","MLA2547",5003,5,0,"—",6,"C"],
+];
+const nf=new Intl.NumberFormat("ru-RU");
+document.getElementById("cats").innerHTML=cats.map(([n,id,items,ch,tr,gr,sc,p])=>{
+  const col=sc>=70?"var(--good)":sc>=45?"var(--warn)":"var(--mute)";
+  const grCls=gr==="—"?"flat":gr.startsWith("−")?"down":"up";
+  return `<tr class="row"${n.startsWith("Deportes")?' data-go="niche"':""}>
+    <td class="name">${n}<small>${id}</small></td>
+    <td class="num">${nf.format(items)}</td>
+    <td class="num">${ch}</td>
+    <td class="num">${tr||"<span style='color:var(--bad)'>0</span>"}</td>
+    <td class="num ${grCls}">${gr}</td>
+    <td><div class="score"><div class="bar"><i style="width:${sc}%;background:${col}"></i></div><span class="sv">${sc}</span></div></td>
+    <td><span class="pill p${p}">${p}</span></td></tr>`;
+}).join("");
+
+function go(id){
+  document.querySelectorAll(".screen").forEach(s=>s.classList.toggle("on",s.id===id));
+  document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("on",t.dataset.go===id));
+  window.scrollTo({top:0,behavior:"instant"});
+}
+document.addEventListener("click",e=>{
+  const t=e.target.closest("[data-go]");
+  if(t){go(t.dataset.go);return}
+  const s=e.target.closest(".site");
+  if(s){document.querySelectorAll(".site").forEach(x=>x.classList.remove("on"));s.classList.add("on")}
+});
+</script>

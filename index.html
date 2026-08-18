@@ -81,6 +81,12 @@ button:focus-visible,[tabindex]:focus-visible,a:focus-visible{outline:2px solid 
 /* сетки */
 .grid{display:grid;gap:13px;margin-bottom:16px}
 .g4{grid-template-columns:repeat(4,1fr)}
+.bento{display:grid;gap:13px;margin-bottom:16px;
+       grid-template-columns:repeat(4,1fr);grid-auto-rows:minmax(0,auto)}
+.bento .lead{grid-column:span 2;grid-row:span 2;display:flex;flex-direction:column;justify-content:space-between}
+.bento .lead .val{font-size:44px;margin:10px 0 2px}
+.bento .spark{margin-top:14px}
+@media(max-width:960px){.bento{grid-template-columns:repeat(2,1fr)}.bento .lead{grid-column:span 2;grid-row:span 1}}
 .g3{grid-template-columns:repeat(3,1fr)}
 .g21{grid-template-columns:2fr 1fr}
 .g12{grid-template-columns:1fr 1fr}
@@ -159,6 +165,19 @@ figure{margin:0}
 .seg button{border:0;background:transparent;font:600 12px/1 var(--ui);color:var(--ink-2);padding:7px 12px;
             border-radius:6px;cursor:pointer}
 .seg button.on{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.12)}
+
+.insight{display:flex;gap:13px;align-items:flex-start;padding:16px 18px;border-radius:var(--r);
+         background:var(--series-soft);border:1px solid transparent;margin-bottom:16px}
+.insight .ic{color:var(--series);font-size:13px;flex:none;margin-top:2px}
+.insight p{margin:0;font-size:13.5px;max-width:88ch}
+.insight strong{display:block;margin-bottom:3px;font-size:13px;letter-spacing:.02em;text-transform:uppercase;
+                color:var(--series);font-weight:700}
+.insight b{font-weight:700}
+.card{transition:border-color .16s,box-shadow .16s}
+.kpi:hover,.card:hover{border-color:#CFCCC2}
+.kbd{display:inline-flex;align-items:center;justify-content:center;min-width:19px;height:19px;padding:0 5px;
+     border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;background:var(--surface);
+     font:600 11px/1 var(--num);color:var(--ink-2);margin-left:6px}
 
 /* вывод */
 .verdict{display:flex;gap:12px;align-items:flex-start;padding:15px 17px;border-radius:var(--r);
@@ -264,15 +283,31 @@ figure{margin:0}
   <div class="head"><h2>Карта рынка — Аргентина</h2><span class="tag t-real">данные живые</span></div>
   <p class="sub">32 корневые категории, снимок 16 августа 2026. Ищем ниши, где спрос есть, а конкуренции ещё мало.</p>
 
-  <div class="grid g4">
+  <div class="insight">
+    <span class="ic">◆</span>
+    <p><strong>Главное за сегодня</strong>
+      Из 32 ниш семь стоят внимания. Самая интересная — <b>Herramientas</b>: прирост товаров
+      1,1 % за неделю при том, что объём ниши вчетверо меньше, чем у мебели. Мёртвых ниш три —
+      Inmuebles, Servicios и Entradas, там нет ни одного трендового запроса.</p>
+  </div>
+
+  <div class="bento">
+    <div class="card kpi lead">
+      <div>
+        <div class="lab">Товаров на площадке</div>
+        <div class="val">168,7<small> млн</small></div>
+        <div class="note">во всех 32 нишах Аргентины</div>
+      </div>
+      <div class="spark" id="spark"></div>
+    </div>
     <div class="card kpi"><div class="lab">Категорий</div><div class="val">32</div>
       <div class="note">2 303 с подкатегориями</div></div>
-    <div class="card kpi"><div class="lab">Товаров на площадке</div><div class="val">168,7<small> млн</small></div>
-      <div class="note">сумма по всем нишам</div></div>
     <div class="card kpi"><div class="lab">Запросов в трендах</div><div class="val">1 450</div>
       <div class="note">обновляются раз в неделю</div></div>
-    <div class="card kpi"><div class="lab">Ниш приоритета A</div><div class="val" style="color:var(--accent)">7</div>
+    <div class="card kpi"><div class="lab">Ниш приоритета A</div><div class="val" style="color:var(--accent-ink)">7</div>
       <div class="note">идут в глубокий сбор</div></div>
+    <div class="card kpi"><div class="lab">Мёртвых ниш</div><div class="val">3</div>
+      <div class="note">без единого запроса</div></div>
   </div>
 
   <div class="card" style="margin-bottom:16px">
@@ -764,6 +799,18 @@ function draw(){
   prices();delta();
 }
 draw();
+(function(){ const h=el("spark"); if(!h) return;
+  const v=[151,153,156,158,159,161,163,164,166,167,168.7], W=260,H=54,c=COL();
+  const mn=Math.min(...v),mx=Math.max(...v);
+  const pts=v.map((x,i)=>`${(i/(v.length-1)*W).toFixed(1)},${(H-(x-mn)/(mx-mn)*(H-8)-4).toFixed(1)}`).join(" L");
+  h.innerHTML=`<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:54px">
+    <defs><linearGradient id="sp" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="${c.s}" stop-opacity=".2"/><stop offset="1" stop-color="${c.s}" stop-opacity="0"/>
+    </linearGradient></defs>
+    <path d="M${pts} L${W},${H} L0,${H} Z" fill="url(#sp)"/>
+    <path d="M${pts}" fill="none" stroke="${c.s}" stroke-width="2" stroke-linejoin="round"/>
+    <circle cx="${W}" cy="${(H-(v[v.length-1]-mn)/(mx-mn)*(H-8)-4).toFixed(1)}" r="3.5" fill="${c.s}"/></svg>
+    <div style="font-size:11.5px;color:var(--ink-3);margin-top:5px">рост за 11 недель наблюдения</div>`;})();
 
 el("range").addEventListener("click",e=>{
   const b=e.target.closest("button");if(!b)return;
@@ -778,8 +825,11 @@ document.addEventListener("click",e=>{
   const t=e.target.closest("[data-go]");if(t){go(t.dataset.go);return}
   const s=e.target.closest(".site");
   if(s){document.querySelectorAll(".site").forEach(x=>x.classList.remove("on"));s.classList.add("on")}});
+const SCREENS=["map","niche","item","radar"];
 document.addEventListener("keydown",e=>{
-  if(e.key==="Enter"){const t=e.target.closest("[data-go]");if(t)go(t.dataset.go)}});
+  if(e.key==="Enter"){const t=e.target.closest("[data-go]");if(t)go(t.dataset.go);return}
+  if(/^[1-4]$/.test(e.key)&&!/INPUT|TEXTAREA/.test(document.activeElement.tagName)) go(SCREENS[+e.key-1]);});
+document.querySelectorAll(".tab").forEach((t,i)=>t.insertAdjacentHTML("beforeend",`<span class="kbd">${i+1}</span>`));
 
 /* подписи ячеек для карточного вида на телефоне */
 document.querySelectorAll("table").forEach(t=>{

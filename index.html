@@ -179,6 +179,22 @@ figure{margin:0}
      border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;background:var(--surface);
      font:600 11px/1 var(--num);color:var(--ink-2);margin-left:6px}
 
+
+.split{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-bottom:4px}
+@media(max-width:680px){.split{grid-template-columns:1fr}}
+.lane{border:1px solid var(--line);border-radius:var(--rb);padding:14px 15px;background:var(--ground)}
+.lane-h{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:9px}
+.lane-h b{font-size:13.5px}
+.lane-h span{font-size:11px;color:var(--ink-3);font-weight:700;letter-spacing:.05em;text-transform:uppercase}
+.lane-v{font:700 30px/1 var(--ui);font-variant-numeric:tabular-nums;letter-spacing:-.035em;
+        color:var(--series)}
+.lane.deep .lane-v{color:var(--accent-ink)}
+.lane-v small{font-size:13px;font-weight:600;letter-spacing:0;color:var(--ink-2)}
+.lane-n{font-size:12px;color:var(--ink-2);margin:8px 0 11px;min-height:32px}
+.lane-bar{height:6px;background:var(--mute-soft);border-radius:3px;overflow:hidden}
+.lane-bar i{display:block;height:100%;background:var(--series);border-radius:3px}
+.lane-bar.deepbar i{background:var(--accent)}
+
 /* вывод */
 .verdict{display:flex;gap:12px;align-items:flex-start;padding:15px 17px;border-radius:var(--r);
          background:var(--accent-soft);margin-bottom:16px}
@@ -321,6 +337,29 @@ figure{margin:0}
     <div class="card-p">
       <figure class="plot" id="bubble"><div class="tip" id="tip-b"></div></figure>
       <p class="q">Каждый круг — ниша, его размер — сколько внутри подкатегорий. Зелёная зона слева вверху: товаров пока немного, а прирост высокий — там и стоит заходить. Справа спрос тоже есть, но продавцов уже слишком много.</p>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:16px">
+    <h3>Что под наблюдением <span class="hint">восемьдесят процентов бюджета вширь, двадцать вглубь</span></h3>
+    <div class="card-p">
+      <div class="split">
+        <div class="lane wide">
+          <div class="lane-h"><b>Вширь, мелко</b><span>80 % бюджета</span></div>
+          <div class="lane-v">2,9 <small>млн товаров</small></div>
+          <div class="lane-n">цена, число продавцов, отзывы &middot; раз в 3-7 дней</div>
+          <div class="lane-bar"><i style="width:80%"></i></div>
+        </div>
+        <div class="lane deep">
+          <div class="lane-h"><b>Вглубь, верхушка</b><span>20 % бюджета</span></div>
+          <div class="lane-v">140 <small>тыс. товаров</small></div>
+          <div class="lane-n">всё то же ежедневно + просмотры по дням и вопросы</div>
+          <div class="lane-bar deepbar"><i style="width:20%"></i></div>
+        </div>
+      </div>
+      <p class="q">Глубокое наблюдение стоит в пять раз дороже мелкого, поэтому широкий слой
+        накрывает почти три миллиона товаров, а глубокий - сто сорок тысяч.
+        Товар не закреплён за слоем: резкий рост поднимает его вглубь, затухание опускает обратно.</p>
     </div>
   </div>
 
@@ -644,10 +683,10 @@ figure{margin:0}
       <p class="q" style="margin:0 0 14px;max-width:74ch">Сейчас виден только сегодняшний срез.
         Если поставить нишу в наблюдение, система начнёт снимать её каждый день - и через неделю
         появится то, ради чего всё затевалось: как менялись цены, сколько продавцов пришло и ушло,
-        растёт ли число отзывов. Ниша среднего размера обходится примерно в 1 200 обращений в сутки. Общий потолок - около 300 тысяч товаров под ежедневным наблюдением: это либо 600 ниш по 500 товаров, либо 60 ниш по 5 тысяч.</p>
+        растёт ли число отзывов. Ниша попадает в широкий слой почти бесплатно, в глубокий - за 2,5 обращения на товар в сутки. Общая ёмкость при раскладке 80/20: около 2,9 млн товаров вширь и 140 тысяч вглубь.</p>
       <button style="border:0;background:var(--accent);color:#fff;font:700 13.5px var(--ui);
               padding:12px 20px;border-radius:9px;cursor:pointer">Наблюдать за нишей</button>
-      <span class="hint" style="margin-left:12px">на наблюдении 4 ниши &middot; занято 6 тысяч товаров из 300 тысяч</span>
+      <span class="hint" style="margin-left:12px">на наблюдении 4 ниши &middot; занято 6 тысяч товаров глубокого слоя из 140 тысяч</span>
     </div>
   </div>
 </section>

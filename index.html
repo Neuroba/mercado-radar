@@ -272,7 +272,8 @@ figure{margin:0}
     <button class="tab on" data-go="map">Карта рынка</button>
     <button class="tab" data-go="niche">Ниша</button>
     <button class="tab" data-go="item">Товар</button>
-    <button class="tab" data-go="radar">Радар недели</button>
+    <button class="tab" data-go="radar">Радар</button>
+    <button class="tab" data-go="probe">Проверить нишу</button>
   </nav>
 </header>
 
@@ -323,6 +324,33 @@ figure{margin:0}
     </div>
   </div>
 
+  <div class="card" style="margin-bottom:16px">
+    <h3>Местные против международных <span class="hint">где иностранцы заходят быстрее местных</span></h3>
+    <div class="scroll"><table>
+      <thead><tr><th>Ниша</th><th class="n">Местных</th><th class="n">Международных</th>
+        <th class="n">Рост местных</th><th class="n">Рост международных</th><th>Сигнал</th></tr></thead>
+      <tbody>
+        <tr><td class="nm">Herramientas</td><td class="n">7 210</td><td class="n">168</td>
+          <td class="n up">+0,9 %</td><td class="n up">+6,4 %</td>
+          <td><span class="pill pA">окно открыто</span></td></tr>
+        <tr><td class="nm">Belleza y Cuidado</td><td class="n">4 390</td><td class="n">59</td>
+          <td class="n up">+0,7 %</td><td class="n up">+4,1 %</td>
+          <td><span class="pill pA">окно открыто</span></td></tr>
+        <tr><td class="nm">Celulares y Telefonos</td><td class="n">4 402</td><td class="n">13</td>
+          <td class="n up">+0,2 %</td><td class="n up">+0,4 %</td>
+          <td><span class="pill pC">ровно</span></td></tr>
+        <tr><td class="nm">Hogar, Muebles y Jardin</td><td class="n">27 431</td><td class="n">23</td>
+          <td class="n up">+0,4 %</td><td class="n down">-1,2 %</td>
+          <td><span class="pill pC">иностранцы уходят</span></td></tr>
+      </tbody>
+    </table></div>
+    <div class="card-p" style="padding-top:0">
+      <p class="q">Иностранный продавец заходит туда, где видит спрос и не видит сильных местных.
+        Если международных прибавляется в разы быстрее — это окно, и оно закроется.
+        Считается по адресу продавца и признаку международной доставки в каждом предложении.</p>
+    </div>
+  </div>
+
   <div class="card">
     <h3>Все категории <span class="hint">нажми строку — откроется ниша</span></h3>
     <div class="scroll"><table>
@@ -365,6 +393,32 @@ figure{margin:0}
       <div class="card-p">
         <figure class="plot" id="kw"><div class="tip" id="tip-k"></div></figure>
       </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:16px">
+    <h3>Разгоняются <span class="hint">ещё не горячие, но растут быстрее всех</span></h3>
+    <div class="scroll"><table>
+      <thead><tr><th>Товар</th><th class="n">Просмотры 7д</th><th class="n">Рост</th>
+        <th class="n">Продавцов</th><th class="n">Отзывов +7д</th><th>Стадия</th></tr></thead>
+      <tbody>
+        <tr class="row"><td class="nm">Cinturon lastre buceo<small>MLA44120983</small></td>
+          <td class="n">610</td><td class="n up">+180 %</td><td class="n">4</td><td class="n up">+9</td>
+          <td><span class="pill pA">разгон</span></td></tr>
+        <tr class="row"><td class="nm">Bandas resistencia set 5<small>MLA39887210</small></td>
+          <td class="n">1 240</td><td class="n up">+124 %</td><td class="n">11</td><td class="n up">+14</td>
+          <td><span class="pill pA">разгон</span></td></tr>
+        <tr class="row"><td class="nm">Rodillo abdominal doble<small>MLA41002877</small></td>
+          <td class="n">880</td><td class="n up">+96 %</td><td class="n">7</td><td class="n up">+6</td>
+          <td><span class="pill pA">разгон</span></td></tr>
+        <tr class="row"><td class="nm">Botella Stanley 1,18 L<small>MLA53151118</small></td>
+          <td class="n">27 480</td><td class="n up">+34 %</td><td class="n">42</td><td class="n up">+38</td>
+          <td><span class="pill pB">уже горячий</span></td></tr>
+      </tbody>
+    </table></div>
+    <div class="card-p" style="padding-top:0">
+      <p class="q">Просмотров мало, но они удваиваются за неделю, а продавцов единицы.
+        Это вход в нишу до конкуренции. Внизу для сравнения товар, куда заходить уже поздно.</p>
     </div>
   </div>
 
@@ -483,7 +537,8 @@ figure{margin:0}
 
 <!-- 4 ─ РАДАР -->
 <section class="screen" id="radar">
-  <div class="head"><h2>Радар недели</h2><span class="tag t-demo">пример данных</span></div>
+  <div class="head"><h2>Радар</h2>
+    <span class="seg" id="period" role="group" aria-label="Период"><button class="on" data-p="7">Неделя</button><button data-p="30">Месяц</button><button data-p="90">Квартал</button></span><span class="tag t-demo">пример данных</span></div>
   <p class="sub">Что изменилось с 9 по 16 августа. Ради этого и копится история: движение видно раньше,
     чем оно станет очевидным всем.</p>
 
@@ -498,9 +553,10 @@ figure{margin:0}
 
   <div class="grid g21">
     <div class="card">
-      <h3>Кто вырос, кто просел <span class="hint">изменение оценки за неделю</span></h3>
+      <h3>Кто вырос, кто просел <span class="hint">оценка 0-100: спрос, конкуренция и динамика вместе</span></h3>
       <div class="card-p">
         <figure class="plot" id="delta"><div class="tip" id="tip-d"></div></figure>
+        <p class="q"><b>Как читать.</b> Число - насколько сместилась оценка ниши. Плюс десять и больше значит, что разом выросли спрос и активность: стоит смотреть. Минус - ниша остывает или в неё набежали продавцы и она перестала быть выгодной. Меньше пяти в любую сторону - обычные колебания, реагировать не нужно.</p>
       </div>
     </div>
     <div class="card">
@@ -524,6 +580,75 @@ figure{margin:0}
     <p><strong>Требует внимания</strong>
       В Deportes y Fitness за неделю зашли 212 новых продавцов, а средняя цена упала на 3,1 %.
       Ниша разогревается, но начинается ценовая война — заходить сейчас или не заходить вовсе.</p>
+  </div>
+</section>
+
+<!-- 5 - ПРОВЕРИТЬ НИШУ -->
+<section class="screen" id="probe">
+  <div class="head"><h2>Проверить нишу</h2><span class="tag t-real">живой запрос к площадке</span></div>
+  <p class="sub">Любой товар, даже мелкий. Спросили про фумленту - вводим и смотрим, что там на самом деле.</p>
+
+  <div class="card" style="margin-bottom:16px">
+    <div class="card-p" style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+      <input id="q" value="cinta teflon" aria-label="Что ищем"
+             style="flex:1;min-width:220px;padding:12px 14px;border:1px solid var(--line);border-radius:9px;
+                    background:var(--surface);color:var(--ink);font:500 14px var(--ui)">
+      <button style="border:0;background:var(--series);color:#fff;font:700 13.5px var(--ui);
+              padding:12px 20px;border-radius:9px;cursor:pointer">Посмотреть</button>
+      <span class="hint">примеры: precinto embalaje &middot; zapatillas trekking &middot; botella stanley</span>
+    </div>
+  </div>
+
+  <div class="grid g4">
+    <div class="card kpi"><div class="lab">Позиций в каталоге</div><div class="val">7 633</div>
+      <div class="note">карточек товара по запросу</div></div>
+    <div class="card kpi"><div class="lab">С живыми ценами</div>
+      <div class="val" style="color:var(--warn)">0<small> из 12</small></div>
+      <div class="note">проверенных позиций</div></div>
+    <div class="card kpi"><div class="lab">Брендов</div><div class="val">38</div>
+      <div class="note">Discover, Garlock, BESPRO...</div></div>
+    <div class="card kpi"><div class="lab">История</div><div class="val" style="color:var(--ink-3)">нет</div>
+      <div class="note">ниша не на наблюдении</div></div>
+  </div>
+
+  <div class="verdict warn" style="margin-bottom:16px"><span class="ic">!</span>
+    <p><strong>Что это значит по фумленте</strong>
+      Каталог большой - 7 633 карточки, бренды и модели видны. Но живых предложений с ценами
+      по проверенным позициям нет ни одного: товар продаётся вне каталожных карточек, поштучно.
+      Цены и продавцов по нему площадка не отдаёт, сколько ни спрашивай.
+      По соседнему запросу &laquo;precinto embalaje&raquo; из двенадцати позиций шесть с ценами -
+      там смотреть можно.</p>
+  </div>
+
+  <div class="card" style="margin-bottom:16px">
+    <h3>Что нашлось в каталоге <span class="tag t-real">живые данные</span></h3>
+    <div class="scroll"><table>
+      <thead><tr><th>Позиция</th><th>Бренд</th><th>Модель</th>
+        <th class="n">Предложений</th><th class="n">Цена</th></tr></thead>
+      <tbody>
+        <tr><td class="nm">Cinta Teflon Blanco Natural 0.090 19mx15mt<small>MLA27608794</small></td>
+          <td>Discover</td><td>B-2</td><td class="n">0</td><td class="n flat">-</td></tr>
+        <tr><td class="nm">Pack 10 Rollos Cinta Teflon 1/2 Pulgada<small>MLA32027839</small></td>
+          <td>BESPRO</td><td>BESPRO</td><td class="n">0</td><td class="n flat">-</td></tr>
+        <tr><td class="nm">Cinta Teflon Garlock Plasti-thread 13mm 6.6m<small>MLA46778686</small></td>
+          <td>Garlock</td><td>06C2NPLTH010</td><td class="n">0</td><td class="n flat">-</td></tr>
+        <tr><td class="nm">Cinta Teflon Garlock Plasti-thread 13mm 13.2m<small>MLA46790738</small></td>
+          <td>Garlock</td><td>06C2NPLTH210</td><td class="n">0</td><td class="n flat">-</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div class="card">
+    <h3>Взять на наблюдение</h3>
+    <div class="card-p">
+      <p class="q" style="margin:0 0 14px;max-width:74ch">Сейчас виден только сегодняшний срез.
+        Если поставить нишу в наблюдение, система начнёт снимать её каждый день - и через неделю
+        появится то, ради чего всё затевалось: как менялись цены, сколько продавцов пришло и ушло,
+        растёт ли число отзывов. Одна ниша на наблюдении расходует около 300 обращений в сутки.</p>
+      <button style="border:0;background:var(--accent);color:#fff;font:700 13.5px var(--ui);
+              padding:12px 20px;border-radius:9px;cursor:pointer">Наблюдать за нишей</button>
+      <span class="hint" style="margin-left:12px">сейчас на наблюдении 4 ниши из 40 возможных</span>
+    </div>
   </div>
 </section>
 
@@ -825,10 +950,10 @@ document.addEventListener("click",e=>{
   const t=e.target.closest("[data-go]");if(t){go(t.dataset.go);return}
   const s=e.target.closest(".site");
   if(s){document.querySelectorAll(".site").forEach(x=>x.classList.remove("on"));s.classList.add("on")}});
-const SCREENS=["map","niche","item","radar"];
+const SCREENS=["map","niche","item","radar","probe"];
 document.addEventListener("keydown",e=>{
   if(e.key==="Enter"){const t=e.target.closest("[data-go]");if(t)go(t.dataset.go);return}
-  if(/^[1-4]$/.test(e.key)&&!/INPUT|TEXTAREA/.test(document.activeElement.tagName)) go(SCREENS[+e.key-1]);});
+  if(/^[1-5]$/.test(e.key)&&!/INPUT|TEXTAREA/.test(document.activeElement.tagName)) go(SCREENS[+e.key-1]);});
 document.querySelectorAll(".tab").forEach((t,i)=>t.insertAdjacentHTML("beforeend",`<span class="kbd">${i+1}</span>`));
 
 /* подписи ячеек для карточного вида на телефоне */

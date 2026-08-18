@@ -1,163 +1,192 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Mercado Radar</title>
 <style>
 :root{
   --yellow:#FFE600; --yellow-ink:#2A2A20;
-  --blue:#3483FA; --blue-soft:#E6F0FF;
-  --ink:#1F2229; --ink-2:#5A6472; --ink-3:#8C93A0;
-  --ground:#EDEEF1; --surface:#FFFFFF; --line:#DFE2E7;
-  --good:#00A650; --good-soft:#E3F5EB;
-  --warn:#F5A623; --warn-soft:#FDF2DF;
-  --bad:#E64A3B; --bad-soft:#FCE9E7;
-  --mute:#9AA1AD; --mute-soft:#EFF0F2;
-  --shadow:0 1px 2px rgba(31,34,41,.08), 0 1px 8px rgba(31,34,41,.05);
-  --r:6px;
+  --series:#3483FA; --series-soft:#E7F0FE;
+  --accent:#00A650; --accent-soft:#E1F4E9;
+  --bad:#C0392B; --bad-soft:#FBEAE7;
+  --warn:#C77A08; --warn-soft:#FBF1E0;
+  --ink:#1F2229; --ink-2:#59616E; --ink-3:#89909C;
+  --ground:#EDEEF1; --surface:#FFFFFF; --line:#DEE1E6; --grid:#EDEFF2;
+  --mute:#A7ADB8; --mute-soft:#EEF0F2;
+  --shadow:0 1px 2px rgba(31,34,41,.07),0 2px 10px rgba(31,34,41,.05);
+  --r:8px;
   --ui:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
   --num:ui-monospace,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
 }
-@media (prefers-color-scheme:dark){
-  :root:not([data-theme="light"]){
-    --yellow:#E8D200; --yellow-ink:#1A1B16;
-    --blue:#5B9BFF; --blue-soft:#1B2739;
-    --ink:#E9EBEF; --ink-2:#A7AEBB; --ink-3:#79818F;
-    --ground:#15171C; --surface:#1D2026; --line:#2C313A;
-    --good:#2ECC71; --good-soft:#122A1E;
-    --warn:#F0AD4E; --warn-soft:#2E2515;
-    --bad:#F0685A; --bad-soft:#2E1A18;
-    --mute:#79818F; --mute-soft:#23262D;
-    --shadow:0 1px 2px rgba(0,0,0,.4);
-  }
-}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --yellow:#DFC900; --yellow-ink:#17180F;
+  --series:#4A8CF5; --series-soft:#182740;
+  --accent:#17A354; --accent-soft:#0F2A1C;
+  --bad:#E2685A; --bad-soft:#2C1917;
+  --warn:#D9922A; --warn-soft:#2A2113;
+  --ink:#E8EAEF; --ink-2:#A4ABB8; --ink-3:#767E8C;
+  --ground:#131519; --surface:#1C1F25; --line:#2A2E37; --grid:#242830;
+  --mute:#767E8C; --mute-soft:#232730;
+  --shadow:0 1px 2px rgba(0,0,0,.45);
+}}
 :root[data-theme="dark"]{
-  --yellow:#E8D200; --yellow-ink:#1A1B16;
-  --blue:#5B9BFF; --blue-soft:#1B2739;
-  --ink:#E9EBEF; --ink-2:#A7AEBB; --ink-3:#79818F;
-  --ground:#15171C; --surface:#1D2026; --line:#2C313A;
-  --good:#2ECC71; --good-soft:#122A1E;
-  --warn:#F0AD4E; --warn-soft:#2E2515;
-  --bad:#F0685A; --bad-soft:#2E1A18;
-  --mute:#79818F; --mute-soft:#23262D;
-  --shadow:0 1px 2px rgba(0,0,0,.4);
+  --yellow:#DFC900; --yellow-ink:#17180F;
+  --series:#4A8CF5; --series-soft:#182740;
+  --accent:#17A354; --accent-soft:#0F2A1C;
+  --bad:#E2685A; --bad-soft:#2C1917;
+  --warn:#D9922A; --warn-soft:#2A2113;
+  --ink:#E8EAEF; --ink-2:#A4ABB8; --ink-3:#767E8C;
+  --ground:#131519; --surface:#1C1F25; --line:#2A2E37; --grid:#242830;
+  --mute:#767E8C; --mute-soft:#232730;
+  --shadow:0 1px 2px rgba(0,0,0,.45);
 }
 *{box-sizing:border-box}
-body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--ui);font-size:14px;line-height:1.45}
-h1,h2,h3{margin:0;text-wrap:balance;letter-spacing:-.015em}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--ui);font-size:14px;line-height:1.45;
+     -webkit-font-smoothing:antialiased}
+h1,h2,h3{margin:0;text-wrap:balance;letter-spacing:-.018em}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 
-/* ── шапка ─────────────────────────────────────────── */
-.top{background:var(--yellow);padding:10px 0 0}
-.top-in{max-width:1180px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+/* шапка */
+.top{background:var(--yellow);padding:11px 0 0}
+.top-in{max-width:1220px;margin:0 auto;padding:0 22px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
 .brand{display:flex;align-items:baseline;gap:9px;color:var(--yellow-ink)}
-.brand b{font-size:20px;letter-spacing:-.03em}
-.brand span{font-size:11.5px;opacity:.62;letter-spacing:.04em;text-transform:uppercase}
-.brand .beta{opacity:1;background:var(--yellow-ink);color:var(--yellow);font-weight:700;
-             padding:2px 7px;border-radius:4px;letter-spacing:.06em;font-size:10px;
-             position:relative;top:-2px}
-.sites{display:flex;gap:4px;margin-left:auto;flex-wrap:wrap}
-.site{border:0;background:rgba(0,0,0,.07);color:var(--yellow-ink);font:600 11.5px/1 var(--ui);
-      padding:6px 10px;border-radius:20px;cursor:pointer;font-family:var(--ui)}
-.site.on{background:var(--yellow-ink);color:var(--yellow)}
-.tabs{max-width:1180px;margin:0 auto;padding:12px 20px 0;display:flex;gap:2px}
-.tab{border:0;background:transparent;font:600 13.5px/1 var(--ui);color:var(--yellow-ink);opacity:.62;
-     padding:10px 14px;cursor:pointer;border-bottom:3px solid transparent;font-family:var(--ui)}
-.tab:hover{opacity:.9}
+.brand b{font-size:20px;letter-spacing:-.035em}
+.brand .beta{background:var(--yellow-ink);color:var(--yellow);font:700 10px/1 var(--ui);padding:3px 7px;
+             border-radius:4px;letter-spacing:.07em;position:relative;top:-2px}
+.brand em{font-style:normal;font-size:11.5px;opacity:.6;letter-spacing:.05em;text-transform:uppercase}
+.sites{display:flex;gap:3px;margin-left:auto;flex-wrap:wrap}
+.site{border:1px solid rgba(0,0,0,.22);background:rgba(255,255,255,.5);color:var(--yellow-ink);
+      font:600 11.5px/1 var(--ui);padding:7px 12px;border-radius:20px;cursor:pointer}
+.site:hover{background:#fff;border-color:rgba(0,0,0,.4)}
+.site.on{background:var(--yellow-ink);color:var(--yellow);border-color:var(--yellow-ink)}
+.tabs{max-width:1220px;margin:0 auto;padding:13px 22px 0;display:flex;gap:2px;overflow-x:auto}
+.tab{border:0;background:transparent;font:600 13.5px/1 var(--ui);color:var(--yellow-ink);opacity:.72;
+     padding:10px 15px;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap}
+.tab:hover{opacity:1;background:rgba(255,255,255,.42)}
 .tab.on{opacity:1;border-bottom-color:var(--yellow-ink)}
-.tab:focus-visible,.site:focus-visible,.row:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+button:focus-visible,[tabindex]:focus-visible,a:focus-visible{outline:2px solid var(--series);outline-offset:2px}
 
-/* ── каркас ────────────────────────────────────────── */
-.wrap{max-width:1180px;margin:0 auto;padding:20px}
-.screen{display:none}
-.screen.on{display:block}
-.crumb{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--ink-3);margin-bottom:12px}
-.crumb a{color:var(--blue);text-decoration:none;cursor:pointer}
-.head{display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap;margin-bottom:4px}
-.head h2{font-size:23px}
-.sub{color:var(--ink-2);font-size:13px;margin:2px 0 18px}
+/* каркас */
+.wrap{max-width:1220px;margin:0 auto;padding:20px 22px}
+.screen{display:none}.screen.on{display:block}
+.crumb{font-size:12.5px;color:var(--ink-3);margin-bottom:11px}
+.crumb a{color:var(--series);text-decoration:none;cursor:pointer}
+.crumb a:hover{text-decoration:underline}
+.head{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.head h2{font-size:24px}
+.sub{color:var(--ink-2);font-size:13px;margin:5px 0 18px;max-width:78ch}
 
-/* ── карточки ──────────────────────────────────────── */
-.grid{display:grid;gap:12px}
+/* сетки */
+.grid{display:grid;gap:13px;margin-bottom:16px}
 .g4{grid-template-columns:repeat(4,1fr)}
 .g3{grid-template-columns:repeat(3,1fr)}
-.g2{grid-template-columns:3fr 2fr}
-@media(max-width:940px){.g4{grid-template-columns:repeat(2,1fr)}.g3,.g2{grid-template-columns:1fr}}
-.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+.g21{grid-template-columns:2fr 1fr}
+.g12{grid-template-columns:1fr 1fr}
+@media(max-width:960px){.g4{grid-template-columns:repeat(2,1fr)}.g3,.g21,.g12{grid-template-columns:1fr}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);
+      min-width:0}
+.card>h3{font-size:14px;padding:14px 16px;border-bottom:1px solid var(--line);display:flex;
+         align-items:center;gap:10px;justify-content:space-between;flex-wrap:wrap}
 .card-p{padding:16px}
-.kpi .lab{font-size:11.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em;font-weight:600}
-.kpi .val{font:700 27px/1.15 var(--ui);font-variant-numeric:tabular-nums;margin:7px 0 3px;letter-spacing:-.03em}
-.kpi .note{font-size:12px;color:var(--ink-2)}
-.card h3{font-size:14px;padding:14px 16px;border-bottom:1px solid var(--line);display:flex;
-         align-items:center;gap:8px;justify-content:space-between}
+.hint{font-weight:400;color:var(--ink-3);font-size:12px}
 
-/* ── таблица ───────────────────────────────────────── */
+/* плитки */
+.kpi{padding:15px 16px}
+.kpi .lab{font-size:11px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.06em;font-weight:700}
+.kpi .val{font:700 28px/1.1 var(--ui);font-variant-numeric:tabular-nums;margin:8px 0 4px;letter-spacing:-.035em}
+.kpi .val small{font-size:15px;font-weight:600;letter-spacing:0}
+.kpi .note{font-size:12px;color:var(--ink-2)}
+.hero{font:700 46px/1 var(--ui);font-variant-numeric:tabular-nums;letter-spacing:-.04em}
+
+/* таблицы */
 .scroll{overflow-x:auto}
 table{width:100%;border-collapse:collapse;font-size:13px}
-th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-3);
-   font-weight:600;padding:9px 12px;border-bottom:1px solid var(--line);white-space:nowrap}
+th{text-align:left;font:700 11px/1.3 var(--ui);text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3);
+   padding:10px 12px;border-bottom:1px solid var(--line);white-space:nowrap;position:sticky;top:0;
+   background:var(--surface)}
 td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:middle}
 tr:last-child td{border-bottom:0}
-.num{font-family:var(--num);font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap;font-size:12.5px}
+.n{font-family:var(--num);font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap;font-size:12.5px}
 .row{cursor:pointer}
-.row:hover td{background:var(--blue-soft)}
-.name{font-weight:600}
-.name small{display:block;font-weight:400;color:var(--ink-3);font-family:var(--num);font-size:11px;margin-top:1px}
+.row:hover td{background:var(--series-soft)}
+.nm{font-weight:600}
+.nm small{display:block;font-weight:400;color:var(--ink-3);font-family:var(--num);font-size:10.5px;margin-top:2px}
 
-/* ── метки ─────────────────────────────────────────── */
-.pill{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:700;
-      padding:3px 9px;border-radius:20px;white-space:nowrap}
-.pA{background:var(--good-soft);color:var(--good)}
-.pB{background:var(--warn-soft);color:#B67608}
+/* метки */
+.pill{display:inline-flex;align-items:center;gap:5px;font:700 11.5px/1 var(--ui);padding:4px 9px;border-radius:20px}
+.pA{background:var(--accent-soft);color:var(--accent)}
+.pB{background:var(--warn-soft);color:var(--warn)}
 .pC{background:var(--mute-soft);color:var(--ink-3)}
-@media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .pB{color:var(--warn)}}
-:root[data-theme="dark"] .pB{color:var(--warn)}
-.up{color:var(--good);font-weight:600}
+.up{color:var(--accent);font-weight:600}
 .down{color:var(--bad);font-weight:600}
 .flat{color:var(--ink-3)}
-.chip{display:inline-block;background:var(--mute-soft);color:var(--ink-2);font-size:12px;
-      padding:4px 10px;border-radius:20px;margin:0 5px 6px 0;border:1px solid var(--line)}
+.chip{display:inline-flex;align-items:center;gap:6px;background:var(--mute-soft);color:var(--ink-2);font-size:12.5px;
+      padding:5px 11px;border-radius:20px;margin:0 6px 7px 0;border:1px solid var(--line)}
 .chip b{color:var(--ink);font-weight:600}
-.chip.new{background:var(--good-soft);color:var(--good);border-color:transparent}
-.chip.gone{background:var(--bad-soft);color:var(--bad);border-color:transparent;text-decoration:line-through}
+.chip.new{background:var(--accent-soft);color:var(--accent);border-color:transparent}
+.chip.new b{color:var(--accent)}
+.chip.gone{background:var(--bad-soft);color:var(--bad);border-color:transparent}
+.chip.gone b{color:var(--bad);text-decoration:line-through}
+.tag{font:700 10.5px/1 var(--ui);padding:4px 8px;border-radius:4px;letter-spacing:.04em;white-space:nowrap}
+.t-real{background:var(--accent-soft);color:var(--accent)}
+.t-demo{background:var(--series-soft);color:var(--series)}
 
-/* ── шкала оценки ──────────────────────────────────── */
-.score{display:flex;align-items:center;gap:8px}
-.bar{width:56px;height:5px;background:var(--mute-soft);border-radius:3px;overflow:hidden;flex:none}
-.bar i{display:block;height:100%;border-radius:3px}
-.sv{font-family:var(--num);font-size:12.5px;font-weight:700;width:26px;text-align:right}
+/* шкала */
+.score{display:flex;align-items:center;gap:9px}
+.bar{width:52px;height:6px;background:var(--mute-soft);border-radius:3px;overflow:hidden;flex:none}
+.bar i{display:block;height:100%;border-radius:3px;background:var(--series)}
+.sv{font-family:var(--num);font-size:12.5px;font-weight:700;width:24px;text-align:right}
 
-/* ── прочее ────────────────────────────────────────── */
-.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--ink-2);margin-top:10px}
-.legend b{color:var(--ink)}
-.demo{background:var(--blue-soft);color:var(--blue);font-size:11px;font-weight:700;padding:3px 8px;
-      border-radius:4px;letter-spacing:.02em}
-.real{background:var(--good-soft);color:var(--good);font-size:11px;font-weight:700;padding:3px 8px;border-radius:4px}
-.foot{max-width:1180px;margin:0 auto;padding:6px 20px 40px;color:var(--ink-3);font-size:12.5px}
-.foot b{color:var(--ink-2)}
-.seller{display:flex;align-items:center;gap:8px}
-.dot{width:8px;height:8px;border-radius:50%;flex:none}
-.win{background:var(--good)}.lose{background:var(--mute)}
-.price{font-family:var(--num);font-weight:700;font-variant-numeric:tabular-nums}
-.big{font:700 34px/1 var(--ui);font-variant-numeric:tabular-nums;letter-spacing:-.03em}
-.q{color:var(--ink-2);font-size:13px;max-width:62ch}
-.verdict{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;border-radius:var(--r);
-         background:var(--good-soft);border:1px solid transparent}
+/* графики */
+figure{margin:0}
+.plot{position:relative}
+.plot svg{display:block;width:100%}
+.tip{position:absolute;pointer-events:none;z-index:9;background:var(--surface);border:1px solid var(--line);
+     border-radius:6px;box-shadow:0 4px 16px rgba(0,0,0,.14);padding:9px 11px;font-size:12.5px;
+     opacity:0;transition:opacity .1s;z-index:5;min-width:120px}
+.tip.on{opacity:1}
+.tip .tt{font-weight:700;margin-bottom:4px;font-size:12.5px}
+.tip .tr{display:flex;justify-content:space-between;gap:14px;color:var(--ink-2)}
+.tip .tr b{color:var(--ink);font-family:var(--num);font-variant-numeric:tabular-nums}
+.axis{font-family:var(--num);font-size:10.5px;fill:var(--ink-3)}
+.gridline{stroke:var(--grid);stroke-width:1}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--ink-2);align-items:center}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.sw{width:11px;height:11px;border-radius:3px;flex:none}
+.seg{display:flex;gap:2px;background:var(--mute-soft);padding:2px;border-radius:6px}
+.seg button{border:0;background:transparent;font:600 12px/1 var(--ui);color:var(--ink-2);padding:6px 11px;
+            border-radius:4px;cursor:pointer}
+.seg button.on{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.12)}
+
+/* вывод */
+.verdict{display:flex;gap:12px;align-items:flex-start;padding:15px 17px;border-radius:var(--r);
+         background:var(--accent-soft);margin-bottom:16px}
 .verdict.warn{background:var(--warn-soft)}
-.verdict .ic{font:700 15px/1 var(--num);color:var(--good);flex:none;margin-top:1px}
-.verdict.warn .ic{color:#B67608}
-.verdict p{margin:0;font-size:13px;color:var(--ink)}
-.verdict strong{display:block;margin-bottom:2px}
+.verdict .ic{font:700 16px/1 var(--num);color:var(--accent);flex:none;margin-top:1px}
+.verdict.warn .ic{color:var(--warn)}
+.verdict p{margin:0;font-size:13px;max-width:80ch}
+.verdict strong{display:block;margin-bottom:3px}
+.q{color:var(--ink-2);font-size:12.5px;max-width:66ch;margin:10px 0 0}
+.foot{max-width:1220px;margin:0 auto;padding:4px 22px 44px;color:var(--ink-3);font-size:12.5px;max-width:96ch}
+.foot b{color:var(--ink-2)}
+.seller{display:flex;align-items:center;gap:9px}
+.dot{width:9px;height:9px;border-radius:50%;flex:none;background:var(--mute)}
+.dot.win{background:var(--accent)}
 </style>
+</head>
+<body data-palette="#3483FA,#00A650">
 
 <header class="top">
   <div class="top-in">
-    <div class="brand"><b>Mercado&nbsp;Radar</b><span class="beta">beta</span><span>Analítica de mercado</span></div>
-    <div class="sites">
-      <button class="site on">Argentina</button>
-      <button class="site">Brasil</button>
-      <button class="site">México</button>
-      <button class="site">Chile</button>
-      <button class="site">Colombia</button>
-      <button class="site">Uruguay</button>
+    <div class="brand"><b>Mercado&nbsp;Radar</b><span class="beta">BETA</span><em>Analítica de mercado</em></div>
+    <div class="sites" role="group" aria-label="Страна">
+      <button class="site on">Argentina</button><button class="site">Brasil</button>
+      <button class="site">México</button><button class="site">Chile</button>
+      <button class="site">Colombia</button><button class="site">Uruguay</button>
     </div>
   </div>
-  <nav class="tabs">
+  <nav class="tabs" aria-label="Разделы">
     <button class="tab on" data-go="map">Карта рынка</button>
     <button class="tab" data-go="niche">Ниша</button>
     <button class="tab" data-go="item">Товар</button>
@@ -167,327 +196,526 @@ tr:last-child td{border-bottom:0}
 
 <main class="wrap">
 
-<!-- ═══ 1. КАРТА РЫНКА ═══ -->
+<!-- 1 ─ КАРТА РЫНКА -->
 <section class="screen on" id="map">
-  <div class="head"><h2>Карта рынка — Аргентина</h2><span class="real">данные реальные</span></div>
-  <p class="sub">32 корневые категории. Снимок 16 августа 2026, 04:15. Нажми на строку — откроется ниша.</p>
+  <div class="head"><h2>Карта рынка — Аргентина</h2><span class="tag t-real">данные живые</span></div>
+  <p class="sub">32 корневые категории, снимок 16 августа 2026. Ищем ниши, где спрос есть, а конкуренции ещё мало.</p>
 
-  <div class="grid g4" style="margin-bottom:16px">
-    <div class="card card-p kpi"><div class="lab">Категорий</div><div class="val">32</div>
+  <div class="grid g4">
+    <div class="card kpi"><div class="lab">Категорий</div><div class="val">32</div>
       <div class="note">2 303 с подкатегориями</div></div>
-    <div class="card card-p kpi"><div class="lab">Товаров на площадке</div><div class="val">168,7 <span style="font-size:16px">млн</span></div>
+    <div class="card kpi"><div class="lab">Товаров на площадке</div><div class="val">168,7<small> млн</small></div>
       <div class="note">сумма по всем нишам</div></div>
-    <div class="card card-p kpi"><div class="lab">Запросов в трендах</div><div class="val">1 450</div>
-      <div class="note">50 на категорию, обновление раз в неделю</div></div>
-    <div class="card card-p kpi"><div class="lab">Приоритет A</div><div class="val" style="color:var(--good)">7</div>
-      <div class="note">ниши для глубокого сбора</div></div>
+    <div class="card kpi"><div class="lab">Запросов в трендах</div><div class="val">1 450</div>
+      <div class="note">обновляются раз в неделю</div></div>
+    <div class="card kpi"><div class="lab">Ниш приоритета A</div><div class="val" style="color:var(--accent)">7</div>
+      <div class="note">идут в глубокий сбор</div></div>
+  </div>
+
+  <div class="card" style="margin-bottom:16px">
+    <h3>Спрос против конкуренции
+      <span class="legend">
+        <span><i class="sw" style="background:var(--accent)"></i>A — брать</span>
+        <span><i class="sw" style="background:var(--series)"></i>B — смотреть</span>
+        <span><i class="sw" style="background:var(--mute)"></i>C — пропустить</span>
+      </span></h3>
+    <div class="card-p">
+      <figure class="plot" id="bubble"><div class="tip" id="tip-b"></div></figure>
+      <p class="q">Каждый круг — ниша, его размер — сколько внутри подкатегорий. Зелёная зона слева вверху: товаров пока немного, а прирост высокий — там и стоит заходить. Справа спрос тоже есть, но продавцов уже слишком много.</p>
+    </div>
   </div>
 
   <div class="card">
-    <h3>Все категории по привлекательности <span style="font-weight:400;color:var(--ink-3);font-size:12px">оценка 0–100</span></h3>
+    <h3>Все категории <span class="hint">нажми строку — откроется ниша</span></h3>
     <div class="scroll"><table>
-      <thead><tr>
-        <th>Категория</th><th class="num">Товаров</th><th class="num">Подкат.</th>
-        <th class="num">Запросов</th><th class="num">Рост за 7д</th><th>Оценка</th><th>Приоритет</th>
-      </tr></thead>
+      <thead><tr><th>Категория</th><th class="n">Товаров</th><th class="n">Подкат.</th>
+        <th class="n">Запросов</th><th class="n">Рост 7д</th><th>Оценка</th><th>Приоритет</th></tr></thead>
       <tbody id="cats"></tbody>
     </table></div>
   </div>
-
-  <div class="legend">
-    <span><b>A</b> — высокая активность, собираем глубоко</span>
-    <span><b>B</b> — средняя, собираем выборочно</span>
-    <span><b>C</b> — мёртвая, только периодический обзор</span>
-  </div>
 </section>
 
-<!-- ═══ 2. НИША ═══ -->
+<!-- 2 ─ НИША -->
 <section class="screen" id="niche">
   <div class="crumb"><a data-go="map">Карта рынка</a> › Deportes y Fitness</div>
-  <div class="head"><h2>Deportes y Fitness</h2><span class="pill pA">приоритет A</span></div>
+  <div class="head"><h2>Deportes y Fitness</h2><span class="pill pA">приоритет A</span>
+    <span class="tag t-real">запросы живые</span></div>
   <p class="sub">MLA1276 · 40 подкатегорий · оценка 87 из 100</p>
 
-  <div class="grid g4" style="margin-bottom:16px">
-    <div class="card card-p kpi"><div class="lab">Товаров в нише</div><div class="val">6,90 <span style="font-size:16px">млн</span></div>
+  <div class="grid g4">
+    <div class="card kpi"><div class="lab">Товаров в нише</div><div class="val">6,90<small> млн</small></div>
       <div class="note"><span class="up">+38 400</span> за неделю</div></div>
-    <div class="card card-p kpi"><div class="lab">Продавцов</div><div class="val">14 208</div>
+    <div class="card kpi"><div class="lab">Продавцов</div><div class="val">14 208</div>
       <div class="note"><span class="up">+212</span> за неделю</div></div>
-    <div class="card card-p kpi"><div class="lab">Средняя цена</div><div class="val">$42 890</div>
+    <div class="card kpi"><div class="lab">Средняя цена</div><div class="val">$42 890</div>
       <div class="note"><span class="down">−3,1 %</span> за месяц</div></div>
-    <div class="card card-p kpi"><div class="lab">Спрос против предложения</div><div class="val" style="color:var(--good)">1,8</div>
+    <div class="card kpi"><div class="lab">Спрос ÷ предложение</div><div class="val" style="color:var(--accent)">1,8</div>
       <div class="note">выше 1 — спрос обгоняет</div></div>
   </div>
 
-  <div class="grid g2" style="margin-bottom:16px">
+  <div class="grid g21">
     <div class="card">
-      <h3>Что ищут прямо сейчас <span class="real">реальные запросы</span></h3>
-      <div class="card-p" style="padding-top:14px">
-        <span class="chip new"><b>stanley</b> · новый</span>
-        <span class="chip"><b>rodilleras</b> · 2 нед.</span>
-        <span class="chip"><b>river</b> · 4 нед.</span>
-        <span class="chip new"><b>zapatillas trekking mujer</b> · новый</span>
-        <span class="chip"><b>zapatillas voley</b> · 3 нед.</span>
-        <span class="chip"><b>botella agua</b> · 6 нед.</span>
-        <span class="chip"><b>zapatillas montagne mujer</b> · 2 нед.</span>
-        <span class="chip"><b>picana defensa personal</b> · 1 нед.</span>
-        <span class="chip"><b>botella stanley</b> · 3 нед.</span>
-        <span class="chip gone">pesas rusas · ушёл</span>
+      <h3>Как заполняется ниша <span class="hint">30 дней</span></h3>
+      <div class="card-p">
+        <figure class="plot" id="fill"><div class="tip" id="tip-f"></div></figure>
+        <p class="q">Объявлений за месяц стало на 4,7 % больше — продавцы заходят.
+          Но спрос растёт быстрее, поэтому ниша пока не переполнена.</p>
       </div>
     </div>
     <div class="card">
-      <h3>Насыщенность за 30 дней</h3>
+      <h3>Что ищут <span class="tag t-real">живые</span></h3>
       <div class="card-p">
-        <svg viewBox="0 0 320 96" style="width:100%;height:96px" role="img" aria-label="График роста числа товаров">
-          <defs><linearGradient id="gr" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="#3483FA" stop-opacity=".26"/>
-            <stop offset="1" stop-color="#3483FA" stop-opacity="0"/></linearGradient></defs>
-          <line x1="0" y1="24" x2="320" y2="24" stroke="currentColor" stroke-opacity=".1"/>
-          <line x1="0" y1="56" x2="320" y2="56" stroke="currentColor" stroke-opacity=".1"/>
-          <path d="M0,78 L32,74 L64,76 L96,68 L128,64 L160,58 L192,52 L224,46 L256,36 L288,30 L320,22 L320,96 L0,96 Z" fill="url(#gr)"/>
-          <path d="M0,78 L32,74 L64,76 L96,68 L128,64 L160,58 L192,52 L224,46 L256,36 L288,30 L320,22"
-                fill="none" stroke="#3483FA" stroke-width="2.2" stroke-linejoin="round"/>
-          <circle cx="320" cy="22" r="4" fill="#3483FA"/>
-        </svg>
-        <p class="q" style="margin:8px 0 0">Продавцы заходят в нишу — за месяц объявлений стало на 4,7 % больше.
-          Конкуренция растёт, но спрос растёт быстрее.</p>
+        <figure class="plot" id="kw"><div class="tip" id="tip-k"></div></figure>
       </div>
     </div>
   </div>
 
   <div class="card">
-    <h3>Товары с наибольшим потенциалом <span class="demo">пример данных</span></h3>
+    <h3>Товары с наибольшим потенциалом <span class="tag t-demo">пример</span></h3>
     <div class="scroll"><table>
-      <thead><tr><th>Товар</th><th class="num">Просмотры 7д</th><th class="num">Динамика</th>
-        <th class="num">Продавцов</th><th class="num">Цена</th><th class="num">Оценка продаж</th><th>Потенциал</th></tr></thead>
+      <thead><tr><th>Товар</th><th class="n">Просмотры 7д</th><th class="n">Динамика</th><th class="n">Продавцов</th>
+        <th class="n">Цена</th><th class="n">Оценка продаж</th><th>Потенциал</th></tr></thead>
       <tbody>
-        <tr class="row" data-go="item"><td class="name">Botella Stanley 1,18 L<small>MLA53151118</small></td>
-          <td class="num">27 480</td><td class="num up">+34 %</td><td class="num">42</td>
-          <td class="num price">$80 565</td><td class="num">~310 / мес</td>
-          <td><div class="score"><div class="bar"><i style="width:92%;background:var(--good)"></i></div><span class="sv">92</span></div></td></tr>
-        <tr class="row"><td class="name">Rodilleras deportivas par<small>MLA41208877</small></td>
-          <td class="num">9 145</td><td class="num up">+18 %</td><td class="num">17</td>
-          <td class="num price">$14 200</td><td class="num">~140 / мес</td>
-          <td><div class="score"><div class="bar"><i style="width:78%;background:var(--good)"></i></div><span class="sv">78</span></div></td></tr>
-        <tr class="row"><td class="name">Zapatillas trekking mujer<small>MLA38665510</small></td>
-          <td class="num">6 902</td><td class="num up">+52 %</td><td class="num">88</td>
-          <td class="num price">$62 400</td><td class="num">~95 / мес</td>
-          <td><div class="score"><div class="bar"><i style="width:64%;background:var(--warn)"></i></div><span class="sv">64</span></div></td></tr>
-        <tr class="row"><td class="name">Colchoneta yoga 10 mm<small>MLA30991204</small></td>
-          <td class="num">4 310</td><td class="num flat">+2 %</td><td class="num">134</td>
-          <td class="num price">$9 850</td><td class="num">~60 / мес</td>
+        <tr class="row" data-go="item"><td class="nm">Botella Stanley 1,18 L<small>MLA53151118</small></td>
+          <td class="n">27 480</td><td class="n up">+34 %</td><td class="n">42</td><td class="n">$80 565</td>
+          <td class="n">~310 / мес</td>
+          <td><div class="score"><div class="bar"><i style="width:92%;background:var(--accent)"></i></div><span class="sv">92</span></div></td></tr>
+        <tr class="row"><td class="nm">Rodilleras deportivas<small>MLA41208877</small></td>
+          <td class="n">9 145</td><td class="n up">+18 %</td><td class="n">17</td><td class="n">$14 200</td>
+          <td class="n">~140 / мес</td>
+          <td><div class="score"><div class="bar"><i style="width:78%;background:var(--accent)"></i></div><span class="sv">78</span></div></td></tr>
+        <tr class="row"><td class="nm">Zapatillas trekking mujer<small>MLA38665510</small></td>
+          <td class="n">6 902</td><td class="n up">+52 %</td><td class="n">88</td><td class="n">$62 400</td>
+          <td class="n">~95 / мес</td>
+          <td><div class="score"><div class="bar"><i style="width:64%"></i></div><span class="sv">64</span></div></td></tr>
+        <tr class="row"><td class="nm">Colchoneta yoga 10 mm<small>MLA30991204</small></td>
+          <td class="n">4 310</td><td class="n flat">+2 %</td><td class="n">134</td><td class="n">$9 850</td>
+          <td class="n">~60 / мес</td>
           <td><div class="score"><div class="bar"><i style="width:31%;background:var(--mute)"></i></div><span class="sv">31</span></div></td></tr>
       </tbody>
     </table></div>
   </div>
 </section>
 
-<!-- ═══ 3. ТОВАР ═══ -->
+<!-- 3 ─ ТОВАР -->
 <section class="screen" id="item">
   <div class="crumb"><a data-go="map">Карта рынка</a> › <a data-go="niche">Deportes y Fitness</a> › Botella Stanley</div>
-  <div class="head"><h2>Botella Stanley 1,18 L</h2><span class="demo">пример данных</span></div>
-  <p class="sub">MLA53151118 · каталожная позиция · 42 продавца конкурируют за первое место</p>
+  <div class="head"><h2>Botella Stanley 1,18 L</h2><span class="tag t-demo">пример данных</span></div>
+  <p class="sub">MLA53151118 · каталожная позиция · за первое место конкурируют 42 продавца</p>
 
-  <div class="grid g4" style="margin-bottom:16px">
-    <div class="card card-p kpi"><div class="lab">Просмотры за 7 дней</div><div class="val">27 480</div>
+  <div class="grid g4">
+    <div class="card kpi"><div class="lab">Просмотры за 7 дней</div><div class="val">27 480</div>
       <div class="note"><span class="up">+34 %</span> к прошлой неделе</div></div>
-    <div class="card card-p kpi"><div class="lab">Отзывов прибавилось</div><div class="val">+38</div>
-      <div class="note">за 7 дней, всего 13 974</div></div>
-    <div class="card card-p kpi"><div class="lab">Оценка продаж</div><div class="val">~310</div>
+    <div class="card kpi"><div class="lab">Прибавилось отзывов</div><div class="val">+38</div>
+      <div class="note">всего 13 974</div></div>
+    <div class="card kpi"><div class="lab">Оценка продаж</div><div class="val">~310</div>
       <div class="note">штук в месяц по всей позиции</div></div>
-    <div class="card card-p kpi"><div class="lab">Оборот ниши</div><div class="val">$25 млн</div>
-      <div class="note">в месяц, оценка по всем продавцам</div></div>
+    <div class="card kpi"><div class="lab">Оборот позиции</div><div class="val">$25<small> млн</small></div>
+      <div class="note">в месяц, все продавцы</div></div>
   </div>
 
-  <div class="grid g2" style="margin-bottom:16px">
+  <div class="card" style="margin-bottom:16px">
+    <h3>Просмотры по дням
+      <span class="seg" id="range" role="group" aria-label="Период">
+        <button data-d="30">30 дней</button><button data-d="60">60</button><button class="on" data-d="90">90</button>
+      </span></h3>
+    <div class="card-p">
+      <figure class="plot" id="visits"><div class="tip" id="tip-v"></div></figure>
+      <p class="q">Наведи курсор — покажет день и число просмотров. Пики приходятся на выходные,
+        это типично для спортивных товаров. Третью неделю подряд интерес растёт.</p>
+    </div>
+  </div>
+
+  <div class="grid g21">
     <div class="card">
-      <h3>Просмотры по дням <span style="font-weight:400;color:var(--ink-3);font-size:12px">90 дней истории</span></h3>
+      <h3>Цены 42 продавцов <span class="hint">зелёный — кто выигрывает карточку</span></h3>
       <div class="card-p">
-        <svg viewBox="0 0 640 150" style="width:100%;height:150px" role="img" aria-label="График просмотров по дням">
-          <defs><linearGradient id="gv" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="#00A650" stop-opacity=".24"/>
-            <stop offset="1" stop-color="#00A650" stop-opacity="0"/></linearGradient></defs>
-          <line x1="0" y1="38" x2="640" y2="38" stroke="currentColor" stroke-opacity=".1"/>
-          <line x1="0" y1="76" x2="640" y2="76" stroke="currentColor" stroke-opacity=".1"/>
-          <line x1="0" y1="114" x2="640" y2="114" stroke="currentColor" stroke-opacity=".1"/>
-          <path d="M0,112 L40,118 L80,104 L120,110 L160,96 L200,100 L240,88 L280,72 L320,84 L360,66 L400,58 L440,70 L480,48 L520,40 L560,52 L600,30 L640,24 L640,150 L0,150 Z" fill="url(#gv)"/>
-          <path d="M0,112 L40,118 L80,104 L120,110 L160,96 L200,100 L240,88 L280,72 L320,84 L360,66 L400,58 L440,70 L480,48 L520,40 L560,52 L600,30 L640,24"
-                fill="none" stroke="#00A650" stroke-width="2.4" stroke-linejoin="round"/>
-          <circle cx="640" cy="24" r="4.5" fill="#00A650"/>
-        </svg>
-        <p class="q" style="margin:10px 0 0">Интерес растёт третью неделю подряд. Пик приходится на выходные —
-          типично для спортивных товаров.</p>
+        <figure class="plot" id="prices"><div class="tip" id="tip-p"></div></figure>
+        <p class="q">Каждая точка — один продавец. Победителя определяет не только цена:
+          у него доставка со склада площадки, поэтому он выигрывает, не будучи самым дешёвым.</p>
       </div>
     </div>
     <div class="card">
-      <h3>Цена по рынку</h3>
+      <h3>Разброс</h3>
       <div class="card-p">
-        <div class="big" style="color:var(--good)">$80 565</div>
-        <p class="q" style="margin:4px 0 14px">победитель карточки, доставка со склада площадки</p>
+        <div class="hero" style="color:var(--accent)">$80 565</div>
+        <p class="q" style="margin:6px 0 16px">цена победителя карточки</p>
         <table style="font-size:12.5px">
-          <tr><td style="padding-left:0">Самая низкая</td><td class="num price">$74 900</td></tr>
-          <tr><td style="padding-left:0">Средняя по 42 продавцам</td><td class="num price">$92 340</td></tr>
-          <tr><td style="padding-left:0">Самая высокая</td><td class="num price">$129 999</td></tr>
-          <tr><td style="padding-left:0;border-bottom:0">Разброс</td><td class="num" style="border-bottom:0">1,7×</td></tr>
+          <tr><td style="padding-left:0">Самая низкая</td><td class="n">$74 900</td></tr>
+          <tr><td style="padding-left:0">Средняя</td><td class="n">$92 340</td></tr>
+          <tr><td style="padding-left:0">Самая высокая</td><td class="n">$129 999</td></tr>
+          <tr><td style="padding-left:0;border-bottom:0">Разброс</td><td class="n" style="border-bottom:0">1,7×</td></tr>
         </table>
       </div>
     </div>
   </div>
 
   <div class="card" style="margin-bottom:16px">
-    <h3>Кто продаёт эту позицию <span style="font-weight:400;color:var(--ink-3);font-size:12px">42 продавца, показаны первые 5</span></h3>
+    <h3>Кто продаёт <span class="hint">первые 5 из 42</span></h3>
     <div class="scroll"><table>
-      <thead><tr><th>Продавец</th><th class="num">Цена</th><th>Доставка</th><th>Репутация</th>
-        <th class="num">Сделок</th><th>Позиция</th></tr></thead>
+      <thead><tr><th>Продавец</th><th class="n">Цена</th><th>Доставка</th><th>Репутация</th>
+        <th class="n">Сделок</th><th>Позиция</th></tr></thead>
       <tbody>
-        <tr><td class="seller"><span class="dot win"></span><span class="name">Deportes Norte<small>113746522</small></span></td>
-          <td class="num price">$80 565</td><td>склад площадки</td><td><span class="pill pA">5 · зелёная</span></td>
-          <td class="num">12 480</td><td><b style="color:var(--good)">выигрывает</b></td></tr>
-        <tr><td class="seller"><span class="dot lose"></span><span class="name">Stanley Oficial<small>209884113</small></span></td>
-          <td class="num price">$84 900</td><td>склад площадки</td><td><span class="pill pA">5 · зелёная</span></td>
-          <td class="num">88 205</td><td class="flat">2 место</td></tr>
-        <tr><td class="seller"><span class="dot lose"></span><span class="name">Todo Camping<small>174552901</small></span></td>
-          <td class="num price">$88 100</td><td>своя доставка</td><td><span class="pill pB">4 · жёлтая</span></td>
-          <td class="num">3 940</td><td class="flat">7 место</td></tr>
-        <tr><td class="seller"><span class="dot lose"></span><span class="name">MegaOutdoor<small>301778420</small></span></td>
-          <td class="num price">$91 500</td><td>склад площадки</td><td><span class="pill pA">5 · зелёная</span></td>
-          <td class="num">21 067</td><td class="flat">11 место</td></tr>
-        <tr><td class="seller"><span class="dot lose"></span><span class="name">Importados BA<small>455120933</small></span></td>
-          <td class="num price">$129 999</td><td>своя доставка</td><td><span class="pill pC">3 · жёлтая</span></td>
-          <td class="num">612</td><td class="flat">38 место</td></tr>
+        <tr><td class="seller"><span class="dot win"></span><span class="nm">Deportes Norte<small>113746522</small></span></td>
+          <td class="n">$80 565</td><td>склад площадки</td><td><span class="pill pA">5 · зелёная</span></td>
+          <td class="n">12 480</td><td><b style="color:var(--accent)">выигрывает</b></td></tr>
+        <tr><td class="seller"><span class="dot"></span><span class="nm">Stanley Oficial<small>209884113</small></span></td>
+          <td class="n">$84 900</td><td>склад площадки</td><td><span class="pill pA">5 · зелёная</span></td>
+          <td class="n">88 205</td><td class="flat">2 место</td></tr>
+        <tr><td class="seller"><span class="dot"></span><span class="nm">Todo Camping<small>174552901</small></span></td>
+          <td class="n">$88 100</td><td>своя доставка</td><td><span class="pill pB">4 · жёлтая</span></td>
+          <td class="n">3 940</td><td class="flat">7 место</td></tr>
+        <tr><td class="seller"><span class="dot"></span><span class="nm">MegaOutdoor<small>301778420</small></span></td>
+          <td class="n">$91 500</td><td>склад площадки</td><td><span class="pill pA">5 · зелёная</span></td>
+          <td class="n">21 067</td><td class="flat">11 место</td></tr>
+        <tr><td class="seller"><span class="dot"></span><span class="nm">Importados BA<small>455120933</small></span></td>
+          <td class="n">$129 999</td><td>своя доставка</td><td><span class="pill pC">3 · жёлтая</span></td>
+          <td class="n">612</td><td class="flat">38 место</td></tr>
       </tbody>
     </table></div>
   </div>
 
-  <div class="verdict">
-    <span class="ic">→</span>
+  <div class="verdict"><span class="ic">→</span>
     <p><strong>Что это значит</strong>
-      Чтобы забрать первое место, нужна цена ниже $80 565 и доставка со склада площадки.
-      При такой цене и текущем спросе позиция даёт ориентировочно 60–90 продаж в месяц на одного продавца.
-      Риск: за месяц в нишу зашли ещё 6 продавцов, цена сползает вниз.</p>
+      Чтобы забрать карточку, нужна цена ниже $80 565 и доставка со склада площадки.
+      При текущем спросе это ориентировочно 60–90 продаж в месяц на одного продавца.
+      Риск: за месяц зашли ещё 6 продавцов, цена сползает вниз.</p>
   </div>
 </section>
 
-<!-- ═══ 4. РАДАР ═══ -->
+<!-- 4 ─ РАДАР -->
 <section class="screen" id="radar">
-  <div class="head"><h2>Радар недели</h2><span class="demo">пример данных</span></div>
-  <p class="sub">Что изменилось с 9 по 16 августа. Ради этого и копится история — движение видно раньше, чем оно станет очевидным.</p>
+  <div class="head"><h2>Радар недели</h2><span class="tag t-demo">пример данных</span></div>
+  <p class="sub">Что изменилось с 9 по 16 августа. Ради этого и копится история: движение видно раньше,
+    чем оно станет очевидным всем.</p>
 
-  <div class="grid g3" style="margin-bottom:16px">
-    <div class="card card-p kpi"><div class="lab">Новых запросов</div><div class="val" style="color:var(--good)">184</div>
-      <div class="note">впервые появились в трендах</div></div>
-    <div class="card card-p kpi"><div class="lab">Запросов ушло</div><div class="val" style="color:var(--bad)">147</div>
-      <div class="note">исчезли из трендов</div></div>
-    <div class="card card-p kpi"><div class="lab">Ниш разогрелось</div><div class="val" style="color:var(--warn)">5</div>
+  <div class="grid g3">
+    <div class="card kpi"><div class="lab">Новых запросов</div><div class="val" style="color:var(--accent)">184</div>
+      <div class="note">впервые попали в тренды</div></div>
+    <div class="card kpi"><div class="lab">Запросов ушло</div><div class="val" style="color:var(--bad)">147</div>
+      <div class="note">выпали из трендов</div></div>
+    <div class="card kpi"><div class="lab">Ниш разогрелось</div><div class="val">5</div>
       <div class="note">оценка выросла больше чем на 10</div></div>
   </div>
 
-  <div class="grid g2" style="margin-bottom:16px">
+  <div class="grid g21">
     <div class="card">
-      <h3>Ниши, которые пошли вверх</h3>
-      <div class="scroll"><table>
-        <thead><tr><th>Категория</th><th class="num">Было</th><th class="num">Стало</th><th class="num">Что сдвинулось</th></tr></thead>
-        <tbody>
-          <tr><td class="name">Deportes y Fitness</td><td class="num">74</td><td class="num" style="color:var(--good);font-weight:700">87</td>
-            <td class="num up">+13</td></tr>
-          <tr><td class="name">Herramientas</td><td class="num">69</td><td class="num" style="color:var(--good);font-weight:700">81</td>
-            <td class="num up">+12</td></tr>
-          <tr><td class="name">Animales y Mascotas</td><td class="num">58</td><td class="num" style="color:var(--good);font-weight:700">69</td>
-            <td class="num up">+11</td></tr>
-          <tr><td class="name">Belleza y Cuidado Personal</td><td class="num">61</td><td class="num">67</td><td class="num up">+6</td></tr>
-          <tr><td class="name">Consolas y Videojuegos</td><td class="num">44</td><td class="num">38</td><td class="num down">−6</td></tr>
-        </tbody>
-      </table></div>
+      <h3>Кто вырос, кто просел <span class="hint">изменение оценки за неделю</span></h3>
+      <div class="card-p">
+        <figure class="plot" id="delta"><div class="tip" id="tip-d"></div></figure>
+      </div>
     </div>
     <div class="card">
-      <h3>Запросы, которых не было неделю назад</h3>
-      <div class="card-p" style="padding-top:14px">
-        <span class="chip new"><b>stanley</b> · Deportes</span>
-        <span class="chip new"><b>zapatillas trekking mujer</b> · Deportes</span>
-        <span class="chip new"><b>milwaukee</b> · Herramientas</span>
-        <span class="chip new"><b>fresadora</b> · Herramientas</span>
-        <span class="chip new"><b>fuente agua gatos</b> · Mascotas</span>
-        <span class="chip new"><b>z fold 8</b> · Celulares</span>
-        <span class="chip new"><b>aro de luz</b> · Belleza</span>
-        <p class="q" style="margin:12px 0 0">Запрос, впервые попавший в тренды, — самый ранний сигнал.
+      <h3>Запросы, которых не было</h3>
+      <div class="card-p">
+        <span class="chip new"><b>stanley</b>Deportes</span>
+        <span class="chip new"><b>zapatillas trekking mujer</b>Deportes</span>
+        <span class="chip new"><b>milwaukee</b>Herramientas</span>
+        <span class="chip new"><b>fresadora</b>Herramientas</span>
+        <span class="chip new"><b>fuente agua gatos</b>Mascotas</span>
+        <span class="chip new"><b>z fold 8</b>Celulares</span>
+        <span class="chip gone"><b>pesas rusas</b>ушёл</span>
+        <span class="chip gone"><b>bici fija</b>ушёл</span>
+        <p class="q">Запрос, впервые попавший в тренды, — самый ранний сигнал.
           До того как он станет заметен по продажам, проходит две-три недели.</p>
       </div>
     </div>
   </div>
 
-  <div class="verdict warn">
-    <span class="ic">!</span>
+  <div class="verdict warn"><span class="ic">!</span>
     <p><strong>Требует внимания</strong>
       В Deportes y Fitness за неделю зашли 212 новых продавцов, а средняя цена упала на 3,1 %.
-      Ниша разогревается, но начинается ценовая война — заходить стоит сейчас или не заходить вовсе.</p>
+      Ниша разогревается, но начинается ценовая война — заходить сейчас или не заходить вовсе.</p>
   </div>
 </section>
 
 </main>
 
-<p class="foot">
-  <b>Что здесь настоящее:</b> категории, число товаров и все запросы в трендах — живые данные Mercado Libre Argentina,
-  снятые 16 августа 2026. <b>Что нарисовано:</b> динамика, оценки продаж, цены конкурентов и оценки ниш —
-  для них нужна накопленная история, она появится через две-три недели после запуска сбора.
-</p>
+<p class="foot"><b>Что здесь настоящее:</b> категории, число товаров и все запросы в трендах — живые данные
+  Mercado Libre Argentina, снятые 16 августа 2026. <b>Что нарисовано:</b> динамика, оценки продаж, цены
+  конкурентов и оценки ниш — для них нужна накопленная история, она появится через две-три недели после
+  запуска сбора.</p>
 
 <script>
-const cats=[
- ["Hogar, Muebles y Jardín","MLA1574",27453820,13,50,"+0,4 %",91,"A"],
- ["Ropa y Accesorios","MLA1430",22877854,10,50,"+0,6 %",89,"A"],
- ["Deportes y Fitness","MLA1276",6897310,40,50,"+0,9 %",87,"A"],
- ["Accesorios para Vehículos","MLA5725",18661810,25,50,"+0,3 %",84,"A"],
- ["Herramientas","MLA407134",7378326,9,50,"+1,1 %",81,"A"],
- ["Juegos y Juguetes","MLA1132",6238954,22,50,"+0,5 %",76,"A"],
- ["Belleza y Cuidado Personal","MLA1246",4448838,13,50,"+0,7 %",74,"A"],
- ["Celulares y Teléfonos","MLA1051",4415216,10,50,"+0,2 %",71,"B"],
- ["Arte, Librería y Mercería","MLA1368",4415025,17,50,"+0,4 %",70,"B"],
- ["Computación","MLA1648",3834086,17,50,"+0,3 %",68,"B"],
- ["Souvenirs, Cotillón y Fiestas","MLA9304",3710125,11,50,"+0,6 %",66,"B"],
- ["Construcción","MLA1500",3411797,17,50,"+0,5 %",64,"B"],
- ["Joyas y Relojes","MLA3937",3021417,14,50,"+0,4 %",62,"B"],
- ["Electrónica, Audio y Video","MLA1000",2918285,19,50,"+0,2 %",61,"B"],
- ["Alimentos y Bebidas","MLA1403",2901955,14,50,"+0,8 %",60,"B"],
- ["Electrodomésticos y Aires Ac.","MLA5726",2669793,14,50,"+0,3 %",58,"B"],
- ["Industrias y Oficinas","MLA1499",2335279,26,50,"+0,4 %",56,"B"],
- ["Animales y Mascotas","MLA1071",2318921,28,50,"+1,0 %",69,"B"],
- ["Cámaras y Accesorios","MLA1039",2077257,10,50,"+0,1 %",49,"B"],
- ["Música, Películas y Series","MLA1168",1861696,7,50,"−0,2 %",41,"C"],
- ["Bebés","MLA1384",1796115,17,50,"+0,4 %",55,"B"],
- ["Otras categorías","MLA1953",1765990,11,50,"+0,3 %",38,"C"],
- ["Salud y Equipamiento Médico","MLA409431",1426424,9,50,"+0,5 %",52,"B"],
- ["Instrumentos Musicales","MLA1182",1228752,11,50,"+0,2 %",44,"C"],
- ["Agro","MLA1512",683043,15,50,"+0,3 %",40,"C"],
- ["Antigüedades y Colecciones","MLA1367",654158,17,50,"+0,1 %",33,"C"],
- ["Inmuebles","MLA1459",619722,4,0,"—",12,"C"],
- ["Libros, Revistas y Comics","MLA3025",21372879,7,50,"+0,2 %",57,"B"],
- ["Consolas y Videojuegos","MLA1144",349236,7,50,"−0,4 %",38,"C"],
- ["Autos, Motos y Otros","MLA1743",160471,7,50,"+0,1 %",29,"C"],
- ["Servicios","MLA1540",12050,20,0,"—",8,"C"],
- ["Entradas para Eventos","MLA2547",5003,5,0,"—",6,"C"],
+const CATS=[
+ ["Hogar, Muebles y Jardín","MLA1574",27453820,13,50,0.4,91,"A"],
+ ["Ropa y Accesorios","MLA1430",22877854,10,50,0.6,89,"A"],
+ ["Libros, Revistas y Comics","MLA3025",21372879,7,50,0.2,57,"B"],
+ ["Accesorios para Vehículos","MLA5725",18661810,25,50,0.3,84,"A"],
+ ["Herramientas","MLA407134",7378326,9,50,1.1,81,"A"],
+ ["Deportes y Fitness","MLA1276",6897310,40,50,0.9,87,"A"],
+ ["Juegos y Juguetes","MLA1132",6238954,22,50,0.5,76,"A"],
+ ["Belleza y Cuidado Personal","MLA1246",4448838,13,50,0.7,74,"A"],
+ ["Celulares y Teléfonos","MLA1051",4415216,10,50,0.2,71,"B"],
+ ["Arte, Librería y Mercería","MLA1368",4415025,17,50,0.4,70,"B"],
+ ["Computación","MLA1648",3834086,17,50,0.3,68,"B"],
+ ["Souvenirs y Fiestas","MLA9304",3710125,11,50,0.6,66,"B"],
+ ["Construcción","MLA1500",3411797,17,50,0.5,64,"B"],
+ ["Joyas y Relojes","MLA3937",3021417,14,50,0.4,62,"B"],
+ ["Electrónica, Audio y Video","MLA1000",2918285,19,50,0.2,61,"B"],
+ ["Alimentos y Bebidas","MLA1403",2901955,14,50,0.8,60,"B"],
+ ["Electrodomésticos","MLA5726",2669793,14,50,0.3,58,"B"],
+ ["Industrias y Oficinas","MLA1499",2335279,26,50,0.4,56,"B"],
+ ["Animales y Mascotas","MLA1071",2318921,28,50,1.0,69,"B"],
+ ["Cámaras y Accesorios","MLA1039",2077257,10,50,0.1,49,"B"],
+ ["Música, Películas y Series","MLA1168",1861696,7,50,-0.2,41,"C"],
+ ["Bebés","MLA1384",1796115,17,50,0.4,55,"B"],
+ ["Otras categorías","MLA1953",1765990,11,50,0.3,38,"C"],
+ ["Salud y Equipamiento Médico","MLA409431",1426424,9,50,0.5,52,"B"],
+ ["Instrumentos Musicales","MLA1182",1228752,11,50,0.2,44,"C"],
+ ["Agro","MLA1512",683043,15,50,0.3,40,"C"],
+ ["Antigüedades y Colecciones","MLA1367",654158,17,50,0.1,33,"C"],
+ ["Inmuebles","MLA1459",619722,4,0,0,12,"C"],
+ ["Consolas y Videojuegos","MLA1144",349236,7,50,-0.4,38,"C"],
+ ["Autos, Motos y Otros","MLA1743",160471,7,50,0.1,29,"C"],
+ ["Servicios","MLA1540",12050,20,0,0,8,"C"],
+ ["Entradas para Eventos","MLA2547",5003,5,0,0,6,"C"],
 ];
 const nf=new Intl.NumberFormat("ru-RU");
-document.getElementById("cats").innerHTML=cats.map(([n,id,items,ch,tr,gr,sc,p])=>{
-  const col=sc>=70?"var(--good)":sc>=45?"var(--warn)":"var(--mute)";
-  const grCls=gr==="—"?"flat":gr.startsWith("−")?"down":"up";
-  return `<tr class="row"${n.startsWith("Deportes")?' data-go="niche"':""}>
-    <td class="name">${n}<small>${id}</small></td>
-    <td class="num">${nf.format(items)}</td>
-    <td class="num">${ch}</td>
-    <td class="num">${tr||"<span style='color:var(--bad)'>0</span>"}</td>
-    <td class="num ${grCls}">${gr}</td>
-    <td><div class="score"><div class="bar"><i style="width:${sc}%;background:${col}"></i></div><span class="sv">${sc}</span></div></td>
-    <td><span class="pill p${p}">${p}</span></td></tr>`;
-}).join("");
+const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const COL=()=>({s:css("--series"),a:css("--accent"),m:css("--mute"),b:css("--bad"),
+                g:css("--grid"),ink3:css("--ink-3"),surf:css("--surface")});
+const P=p=>({A:COL().a,B:COL().s,C:COL().m}[p]);
+const el=id=>document.getElementById(id);
+const svg=(w,h,inner)=>`<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="xMidYMid meet" role="img">${inner}</svg>`;
 
-function go(id){
-  document.querySelectorAll(".screen").forEach(s=>s.classList.toggle("on",s.id===id));
-  document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("on",t.dataset.go===id));
-  window.scrollTo({top:0,behavior:"instant"});
+/* ── таблица категорий ─────────────────────────── */
+el("cats").innerHTML=CATS.map(([n,id,it,ch,tr,gr,sc,p])=>{
+  const cls=gr>0.05?"up":gr<0?"down":"flat", g=tr?(gr>0?"+":"")+gr.toFixed(1)+" %":"—";
+  return `<tr class="row"${n.startsWith("Deportes")?' data-go="niche"':""} tabindex="0">
+   <td class="nm">${n}<small>${id}</small></td><td class="n">${nf.format(it)}</td><td class="n">${ch}</td>
+   <td class="n"${tr?"":' style="color:var(--bad)"'}>${tr}</td><td class="n ${cls}">${g}</td>
+   <td><div class="score"><div class="bar"><i style="width:${sc}%;background:${P(p)}"></i></div><span class="sv">${sc}</span></div></td>
+   <td><span class="pill p${p}">${p}</span></td></tr>`}).join("");
+
+/* ── пузырьковая карта ─────────────────────────── */
+function bubble(){
+  const W=1000,H=440,L=62,R=22,T=34,B=54,c=COL();
+  const xs=v=>L+(Math.log10(Math.max(v,1e4))-4)/(7.5-4)*(W-L-R);
+  const ys=v=>H-B-(Math.sqrt(Math.max(v,0)/1.15))*(H-T-B);
+  const midX=xs(3.2e6), midY=ys(.42);
+  let g="";
+  // квадранты: сначала фон, потом всё остальное поверх
+  g+=`<rect x="${L}" y="${T}" width="${midX-L}" height="${midY-T}" fill="${c.a}" fill-opacity=".07"/>
+      <rect x="${midX}" y="${T}" width="${W-R-midX}" height="${midY-T}" fill="${c.s}" fill-opacity=".05"/>
+      <rect x="${L}" y="${midY}" width="${midX-L}" height="${H-B-midY}" fill="${c.m}" fill-opacity=".05"/>
+      <line x1="${midX}" y1="${T}" x2="${midX}" y2="${H-B}" stroke="${c.g}" stroke-width="1" stroke-dasharray="4 4"/>
+      <line x1="${L}" y1="${midY}" x2="${W-R}" y2="${midY}" stroke="${c.g}" stroke-width="1" stroke-dasharray="4 4"/>`;
+  const qlab=(x,y,t,col,anchor)=>`<text x="${x}" y="${y}" text-anchor="${anchor}"
+      style="font:700 11.5px var(--ui);fill:${col};opacity:.55;letter-spacing:.04em">${t}</text>`;
+  g+=qlab(L+10,T+18,"ЗАХОДИТЬ СЮДА",c.a,"start");
+  g+=qlab(W-R-10,T+18,"СПРОС ЕСТЬ, НО ТЕСНО",c.s,"end");
+  g+=qlab(L+10,H-B-10,"ПОКА МИМО",c.ink3,"start");
+  g+=qlab(W-R-10,H-B-10,"ПЕРЕГРЕТО",c.ink3,"end");
+  // оси
+  [0,.15,.4,.7,1.1].forEach(v=>{
+    g+=`<text class="axis" x="${L-10}" y="${(ys(v)+4).toFixed(1)}" text-anchor="end">${v.toFixed(2)} %</text>`});
+  [1e4,1e5,1e6,1e7].forEach(v=>{const x=xs(v);
+    g+=`<text class="axis" x="${x.toFixed(1)}" y="${H-B+18}" text-anchor="middle">${v>=1e6?v/1e6+" млн":v/1e3+" тыс"}</text>`});
+  g+=`<text x="${((L+W-R)/2).toFixed(0)}" y="${H-16}" text-anchor="middle"
+        style="font:600 11.5px var(--ui);fill:${c.ink3}">товаров в нише  ·  вправо = конкуренции больше</text>
+      <text x="${-((T+H-B)/2).toFixed(0)}" y="16" transform="rotate(-90)" text-anchor="middle"
+        style="font:600 11.5px var(--ui);fill:${c.ink3}">прирост товаров за неделю  ·  вверх = спрос живее</text>`;
+  const pts=CATS.map((d,i)=>({i,n:d[0],x:xs(d[2]),y:ys(d[5]),
+      r:Math.max(7,Math.min(30,Math.sqrt(d[3])*4.2)),p:d[7],d}));
+  pts.sort((a,b)=>b.r-a.r).forEach(p=>{
+    g+=`<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${p.r.toFixed(1)}" fill="${P(p.p)}"
+         fill-opacity=".55" stroke="${c.surf}" stroke-width="2" data-i="${p.i}" style="cursor:pointer"/>`});
+  // подписи: только заметные ниши, со сдвигом вниз для нижнего ряда
+  const named=pts.filter(p=>p.d[2]>6e6||p.d[5]>=.9).sort((a,b)=>a.y-b.y);
+  const used=[];
+  named.forEach(p=>{
+    let ly=p.y-p.r-8;
+    while(used.some(u=>Math.abs(u.y-ly)<13&&Math.abs(u.x-p.x)<150)) ly-=13;
+    used.push({x:p.x,y:ly});
+    g+=`<text x="${p.x.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="middle"
+         style="font:600 11px var(--ui);fill:${css("--ink")};paint-order:stroke;stroke:${c.surf};stroke-width:3px"
+         >${p.n.split(",")[0].split(" y ")[0]}</text>`});
+  el("bubble").insertAdjacentHTML("afterbegin",svg(W,H,g));
+  const tip=el("tip-b"), host=el("bubble");
+  host.querySelectorAll("circle").forEach(ci=>{
+    ci.addEventListener("mouseenter",()=>{
+      const d=CATS[+ci.dataset.i], r=host.getBoundingClientRect(), b=ci.getBoundingClientRect();
+      tip.innerHTML=`<div class="tt">${d[0]}</div>
+        <div class="tr">товаров<b>${nf.format(d[2])}</b></div>
+        <div class="tr">подкатегорий<b>${d[3]}</b></div>
+        <div class="tr">запросов в трендах<b>${d[4]}</b></div>
+        <div class="tr">прирост за неделю<b>${d[4]?(d[5]>0?"+":"")+d[5].toFixed(1)+" %":"—"}</b></div>
+        <div class="tr">оценка<b>${d[6]}</b></div>`;
+      tip.classList.add("on");
+      tip.style.left=Math.min(r.width-190,Math.max(0,b.left-r.left+b.width/2-85))+"px";
+      tip.style.top=Math.max(0,b.top-r.top-tip.offsetHeight-10)+"px";
+      ci.setAttribute("fill-opacity",".95");ci.setAttribute("stroke-width","3")});
+    ci.addEventListener("mouseleave",()=>{tip.classList.remove("on");
+      ci.setAttribute("fill-opacity",".55");ci.setAttribute("stroke-width","2")})});
 }
+
+/* ── линия с прицелом ──────────────────────────── */
+function area(host,tipEl,data,fmt,color){
+  const W=920,H=board(host)?230:200,L=52,R=14,T=14,B=28,c=COL();
+  const mx=Math.max(...data.map(d=>d.v)),mn=Math.min(...data.map(d=>d.v)),pad=(mx-mn)*.18||1;
+  const hi=mx+pad,lo=Math.max(0,mn-pad);
+  const xs=i=>L+i*(W-L-R)/(data.length-1), ys=v=>H-B-(v-lo)/(hi-lo)*(H-T-B);
+  let g="";
+  for(let i=0;i<=3;i++){const y=T+i*(H-T-B)/3, v=Math.round(hi-(hi-lo)*i/3);
+    g+=`<line class="gridline" x1="${L}" y1="${y}" x2="${W-R}" y2="${y}"/>
+        <text class="axis" x="${L-8}" y="${y+4}" text-anchor="end">${nf.format(v)}</text>`}
+  const pts=data.map((d,i)=>`${xs(i).toFixed(1)},${ys(d.v).toFixed(1)}`).join(" L");
+  g+=`<defs><linearGradient id="fill-${host.id}" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="${color}" stop-opacity=".22"/>
+      <stop offset="1" stop-color="${color}" stop-opacity="0"/></linearGradient></defs>
+      <path d="M${pts} L${xs(data.length-1).toFixed(1)},${H-B} L${L},${H-B} Z" fill="url(#fill-${host.id})"/>
+      <path d="M${pts}" fill="none" stroke="${color}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+      <circle cx="${xs(data.length-1).toFixed(1)}" cy="${ys(data[data.length-1].v).toFixed(1)}" r="4.5"
+        fill="${color}" stroke="${c.surf}" stroke-width="2"/>`;
+  const step=Math.ceil(data.length/6);
+  data.forEach((d,i)=>{if(i%step===0||i===data.length-1)
+    g+=`<text class="axis" x="${xs(i).toFixed(1)}" y="${H-B+16}" text-anchor="middle">${d.l}</text>`});
+  g+=`<line id="ch-${host.id}" x1="0" y1="${T}" x2="0" y2="${H-B}" stroke="${c.ink3}" stroke-width="1"
+       stroke-dasharray="3 3" opacity="0"/>
+      <circle id="cd-${host.id}" r="5" fill="${color}" stroke="${c.surf}" stroke-width="2" opacity="0"/>
+      <rect x="${L}" y="${T}" width="${W-L-R}" height="${H-T-B}" fill="transparent" id="hit-${host.id}"/>`;
+  host.insertAdjacentHTML("afterbegin",svg(W,H,g));
+  const hit=host.querySelector(`#hit-${host.id}`),ch=host.querySelector(`#ch-${host.id}`),
+        cd=host.querySelector(`#cd-${host.id}`),sv=host.querySelector("svg");
+  hit.addEventListener("mousemove",e=>{
+    const r=sv.getBoundingClientRect(), px=(e.clientX-r.left)/r.width*W;
+    let i=Math.round((px-L)/((W-L-R)/(data.length-1)));
+    i=Math.max(0,Math.min(data.length-1,i));
+    const x=xs(i),y=ys(data[i].v);
+    ch.setAttribute("x1",x);ch.setAttribute("x2",x);ch.setAttribute("opacity",".55");
+    cd.setAttribute("cx",x);cd.setAttribute("cy",y);cd.setAttribute("opacity","1");
+    tipEl.innerHTML=`<div class="tt">${data[i].full||data[i].l}</div><div class="tr">${fmt.lab}<b>${fmt.f(data[i].v)}</b></div>`;
+    tipEl.classList.add("on");
+    const hr=host.getBoundingClientRect();
+    tipEl.style.left=Math.min(hr.width-150,Math.max(0,x/W*hr.width-70))+"px";
+    tipEl.style.top=Math.max(0,y/H*hr.height-tipEl.offsetHeight-12)+"px"});
+  hit.addEventListener("mouseleave",()=>{ch.setAttribute("opacity","0");cd.setAttribute("opacity","0");
+    tipEl.classList.remove("on")});
+}
+const board=h=>h.id==="visits";
+
+/* ── горизонтальные бары запросов ──────────────── */
+function keywords(){
+  const KW=[["stanley",1],["rodilleras",2],["river",3],["zapatillas trekking mujer",4],["zapatillas voley",5],
+            ["botella agua",6],["zapatillas montagne",7],["picana defensa",8],["botella stanley",9],["rodillera",10]];
+  const W=440,rh=27,H=KW.length*rh+12,L=150,c=COL();
+  let g="";
+  KW.forEach(([k,pos],i)=>{
+    const y=i*rh+8, w=(11-pos)/10*(W-L-46);
+    g+=`<text class="axis" x="${L-9}" y="${y+13}" text-anchor="end"
+         style="font-size:11.5px;fill:${css("--ink-2")}">${k.length>19?k.slice(0,18)+"…":k}</text>
+        <rect x="${L}" y="${y+3}" width="${w.toFixed(1)}" height="13" rx="4" fill="${c.s}" data-k="${i}"
+         style="cursor:pointer"/>
+        <text class="axis" x="${L+w+7}" y="${y+13}" style="font-size:11px">№${pos}</text>`});
+  el("kw").insertAdjacentHTML("afterbegin",svg(W,H,g));
+  el("kw").insertAdjacentHTML("beforeend",
+    `<p class="q" style="margin-top:10px">Чем длиннее полоса, тем выше запрос в недельном рейтинге площадки.</p>`);
+}
+
+/* ── точки цен ─────────────────────────────────── */
+function prices(){
+  const seed=[74900,76500,78200,79000,80565,81300,82100,84900,85400,86200,87000,88100,88900,89500,90200,
+              91500,92000,92800,93500,94200,95000,96100,97300,98000,99500,101000,102400,103800,105200,
+              106900,108500,110200,112000,114500,116800,119000,121500,123000,125400,127000,128500,129999];
+  const W=640,H=190,L=16,R=16,T=26,B=34,c=COL();
+  const mn=Math.min(...seed),mx=Math.max(...seed);
+  const xs=v=>L+(v-mn)/(mx-mn)*(W-L-R);
+  let g=`<line x1="${L}" y1="${H-B}" x2="${W-R}" y2="${H-B}" stroke="${c.g}" stroke-width="1"/>`;
+  [mn,92340,mx].forEach((v,i)=>{
+    g+=`<text class="axis" x="${xs(v).toFixed(1)}" y="${H-B+17}" text-anchor="${i===0?"start":i===2?"end":"middle"}">$${nf.format(v)}</text>`});
+  g+=`<text class="axis" x="${xs(92340).toFixed(1)}" y="${H-B+30}" text-anchor="middle" style="font-size:10px">средняя</text>`;
+  seed.forEach((v,i)=>{
+    const win=v===80565, row=i%7;
+    g+=`<circle cx="${xs(v).toFixed(1)}" cy="${(T+row*8.5).toFixed(1)}" r="${win?7:4.5}"
+         fill="${win?c.a:c.m}" fill-opacity="${win?1:.5}" stroke="${c.surf}" stroke-width="${win?2:1.5}"
+         data-v="${v}" style="cursor:pointer"/>`});
+  g+=`<line x1="${xs(80565).toFixed(1)}" y1="${T-14}" x2="${xs(80565).toFixed(1)}" y2="${H-B}"
+       stroke="${c.a}" stroke-width="1.5" stroke-dasharray="4 3"/>
+      <text x="${xs(80565).toFixed(1)}" y="${T-19}" text-anchor="middle"
+       style="font:700 11px var(--ui);fill:${c.a}">выигрывает</text>`;
+  el("prices").insertAdjacentHTML("afterbegin",svg(W,H,g));
+  const tip=el("tip-p"),host=el("prices");
+  host.querySelectorAll("circle").forEach(ci=>{
+    ci.addEventListener("mouseenter",()=>{
+      const v=+ci.dataset.v,r=host.getBoundingClientRect(),b=ci.getBoundingClientRect();
+      tip.innerHTML=`<div class="tt">$${nf.format(v)}</div><div class="tr">${v===80565?"побеждает в карточке":"место в очереди"}<b>${v===80565?"1":seed.indexOf(v)+1}</b></div>`;
+      tip.classList.add("on");
+      tip.style.left=Math.min(r.width-140,Math.max(0,b.left-r.left+b.width/2-65))+"px";
+      tip.style.top=(b.top-r.top-tip.offsetHeight-8)+"px"});
+    ci.addEventListener("mouseleave",()=>tip.classList.remove("on"))});
+}
+
+/* ── расходящиеся бары ─────────────────────────── */
+function delta(){
+  const D=[["Deportes y Fitness",13],["Herramientas",12],["Animales y Mascotas",11],
+           ["Belleza y Cuidado",6],["Alimentos y Bebidas",4],["Bebés",-3],
+           ["Consolas y Videojuegos",-6],["Música y Series",-8]];
+  const W=620,rh=30,H=D.length*rh+30,L=150,c=COL(),mid=L+(W-L-30)/2,half=(W-L-40)/2;
+  const mxv=14;
+  let g=`<line x1="${mid}" y1="14" x2="${mid}" y2="${H-22}" stroke="${c.g}" stroke-width="1"/>`;
+  D.forEach(([n,v],i)=>{
+    const y=i*rh+18, w=Math.abs(v)/mxv*half, pos=v>0;
+    g+=`<text class="axis" x="${L-10}" y="${y+14}" text-anchor="end"
+         style="font-size:11.5px;fill:${css("--ink-2")}">${n.length>20?n.slice(0,19)+"…":n}</text>
+        <rect x="${pos?mid:mid-w}" y="${y+3}" width="${w.toFixed(1)}" height="15" rx="4"
+         fill="${pos?c.a:c.b}" data-n="${n}" data-v="${v}" style="cursor:pointer"/>
+        <text class="axis" x="${pos?mid+w+7:mid-w-7}" y="${y+14}" text-anchor="${pos?"start":"end"}"
+         style="font-weight:700;fill:${pos?c.a:c.b}">${pos?"+":""}${v}</text>`});
+  g+=`<text class="axis" x="${mid}" y="${H-6}" text-anchor="middle" style="font-size:11px">изменение оценки за неделю</text>`;
+  el("delta").insertAdjacentHTML("afterbegin",svg(W,H,g));
+}
+
+/* ── данные для линий ──────────────────────────── */
+const MON=["янв","фев","мар","апр","мая","июн","июл","авг"];
+function visitSeries(days){
+  const base=[112,118,104,110,96,100,88,72,84,66,58,70,48,40,52,30,24];
+  const out=[],today=new Date(2026,7,16);
+  for(let i=days-1;i>=0;i--){
+    const d=new Date(today);d.setDate(d.getDate()-i);
+    const t=(days-1-i)/(days-1);
+    const wk=[0,6].includes(d.getDay())?1.22:1;
+    const v=Math.round((180+t*520)*wk*(0.92+0.16*Math.sin(i*1.7)));
+    out.push({v,l:`${d.getDate()}`,full:`${d.getDate()} ${MON[d.getMonth()]}`})}
+  return out;
+}
+function fillSeries(){
+  const out=[],today=new Date(2026,7,16);
+  for(let i=29;i>=0;i--){const d=new Date(today);d.setDate(d.getDate()-i);
+    const v=Math.round(6588000+(29-i)*10600+Math.sin(i*.9)*9000);
+    out.push({v,l:`${d.getDate()}`,full:`${d.getDate()} ${MON[d.getMonth()]}`})}
+  return out;
+}
+
+/* ── сборка ────────────────────────────────────── */
+function draw(){
+  ["bubble","fill","kw","visits","prices","delta"].forEach(id=>{
+    const h=el(id);h.querySelectorAll("svg,p.q").forEach(n=>n.remove())});
+  bubble();
+  area(el("fill"),el("tip-f"),fillSeries(),{lab:"объявлений",f:v=>nf.format(v)},COL().s);
+  keywords();
+  const d=+document.querySelector("#range button.on").dataset.d;
+  area(el("visits"),el("tip-v"),visitSeries(d),{lab:"просмотров",f:v=>nf.format(v)},COL().a);
+  prices();delta();
+}
+draw();
+
+el("range").addEventListener("click",e=>{
+  const b=e.target.closest("button");if(!b)return;
+  el("range").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b));
+  const h=el("visits");h.querySelectorAll("svg,p.q").forEach(n=>n.remove());
+  area(h,el("tip-v"),visitSeries(+b.dataset.d),{lab:"просмотров",f:v=>nf.format(v)},COL().a)});
+
+function go(id){document.querySelectorAll(".screen").forEach(s=>s.classList.toggle("on",s.id===id));
+  document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("on",t.dataset.go===id));
+  window.scrollTo({top:0,behavior:"instant"})}
 document.addEventListener("click",e=>{
-  const t=e.target.closest("[data-go]");
-  if(t){go(t.dataset.go);return}
+  const t=e.target.closest("[data-go]");if(t){go(t.dataset.go);return}
   const s=e.target.closest(".site");
-  if(s){document.querySelectorAll(".site").forEach(x=>x.classList.remove("on"));s.classList.add("on")}
-});
+  if(s){document.querySelectorAll(".site").forEach(x=>x.classList.remove("on"));s.classList.add("on")}});
+document.addEventListener("keydown",e=>{
+  if(e.key==="Enter"){const t=e.target.closest("[data-go]");if(t)go(t.dataset.go)}});
+matchMedia("(prefers-color-scheme:dark)").addEventListener("change",draw);
 </script>
+</body>
+</html>
